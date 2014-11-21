@@ -1,0 +1,36 @@
+{
+  "name": "deefour/presenter",
+  "version": "0.1.0",
+  "description": "Presenters/Decorators for PHP Objects",
+  "homepage": "https://github.com/deefour/authorizer",
+  "keywords": ["presenter", "deefour", "decorator", "view", "model", "laravel"],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5.0",
+    "illuminate/support": "~5.0@dev"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "~2.1@dev",
+    "illuminate/support": "dev-master"
+  },
+  "authors": [
+  {
+    "name": "Jason Daly",
+    "email": "jason@deefour.me"
+  }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Deefour\\": "src"
+    },
+    "files": [
+      "src/Presenter/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Deefour\\Presenter\\Stubs\\": "stub/"
+    }
+  }
+}
