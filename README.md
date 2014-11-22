@@ -97,7 +97,13 @@ namespace App\Presenters;
 
 use Deefour\Presenter\AbstractPresenter;
 
-class ArticlePresenter extends AbstractPresenter { }
+class ArticlePresenter extends AbstractPresenter {
+
+  public function isDraft() {
+    return $this->model->isDraft() ? 'Yes' : 'No';
+  }
+
+}
 
 ```
 
@@ -113,11 +119,11 @@ $presenter = (new Factory)->make(new Article); //=> ArticlePolicy
 $presenter->model; //=> Article
 
 $presenter->model->isDraft(); //=> false
-$presenter->isDraft(); //=> false
-$presenter->is_draft; //=> false
+$presenter->isDraft(); //=> 'No'
+$presenter->is_draft; //=> 'No'
 
-$presenter->model()->published; //=> false
-$presenter->published; //=> false
+$presenter->model()->published; //=> true
+$presenter->published; //=> true
 ```
 
 A few things to notice:
@@ -172,6 +178,47 @@ If you want access to the raw association, simply request it from the underlying
 ```php
 $presenter->model->tags()->first(); //=> Tag
 ```
+
+## Integration with Laravel
+
+Presenter comes with a service provider for the `Deefour\Presenter\Factory` presenter factory. In Laravel's `config/app.php` file, add the `PresenterServiceProvider` to the list of providers.
+
+```php
+'providers' => [
+
+  // ...
+
+  'Deefour\Presenter\Providers\PresenterServiceProvider',
+
+],
+```
+
+### Helper Methods
+
+A `presenter()`  global function is available to generate a presenter for an object anywhere within an application. In a view, the following could be done
+
+```php
+presenter($article)->is_draft; //=> 'No'
+```
+
+### Middleware
+
+A middleware exists at `Deefour\Presenter\Middleware\DecoratePresentableObjects` that will attempt to decorate every variable passed to a view as part of a rendered response with it's related presenter.
+
+To enable this middleware, add the FQCN to the list of in `app/Http/Kernel.php`.
+
+```php
+protected $middleware = [
+
+  // ...
+
+  'Deefour\Presenter\Middleware\DecoreatePresentableObjects',
+
+];
+```
+
+> **Note:** This middleware is **completely optional**. It may save a few keystrokes controller actions and views, but you should decide carefully if using such a middleware is the smartest approach to decorate objects for presentation within *your* application.
+
 
 ## Contribute
 
