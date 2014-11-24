@@ -2,7 +2,7 @@
   "name": "deefour/presenter",
   "version": "0.1.0",
   "description": "Presenters/Decorators for PHP Objects",
-  "homepage": "https://github.com/deefour/authorizer",
+  "homepage": "https://github.com/deefour/presenter",
   "keywords": ["presenter", "deefour", "decorator", "view", "model", "laravel"],
   "license": "MIT",
   "require": {
