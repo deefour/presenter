@@ -62,13 +62,13 @@ class Article {
 }
 ```
 
-The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\PresentableContract`. A `Deefour\Presenter\Traits\Presentable` trait is available to satisfy the interface with sensible defaults.
+The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\PresentableContract`. A `Deefour\Presenter\Presentable` trait is available to satisfy the interface with sensible defaults.
 
 ```php
 namespace App;
 
 use Deefour\Presenter\Contracts\PresentableContract;
-use Deefour\Presenter\Traits\Presentable;
+use Deefour\Presenter\Presentable;
 
 class Article implements PresentableContract {
 
@@ -78,7 +78,7 @@ class Article implements PresentableContract {
    * @inheritdoc
    */
   public function presenterNamespace() {
-    return '\\App\\Presenters';
+    return '\App\Presenters';
   }
 
   // properties and methods here ...
@@ -95,9 +95,9 @@ As for the `ArticlePresenter`, a bare implementation could be
 ```php
 namespace App\Presenters;
 
-use Deefour\Presenter\AbstractPresenter;
+use Deefour\Presenter\Presenter;
 
-class ArticlePresenter extends AbstractPresenter {
+class ArticlePresenter extends Presenter {
 
   public function isDraft() {
     return $this->model->isDraft() ? 'Yes' : 'No';

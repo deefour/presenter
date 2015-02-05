@@ -1,9 +1,9 @@
-<?php namespace Deefour\Authorizer\Providers;
+<?php namespace Deefour\Presenter\Providers;
 
 use Deefour\Presenter\Factory;
 use Illuminate\Support\ServiceProvider;
 
-class AuthorizationServiceProvider extends ServiceProvider {
+class PresenterServiceProvider extends ServiceProvider {
 
   /**
    * Indicates if loading of the provider is deferred.
