@@ -1,6 +1,6 @@
 <?php namespace Deefour\Presenter;
 
-use Deefour\Presenter\Contracts\PresentableContract;
+use Deefour\Presenter\Contracts\Presentable as PresentableContract;
 use Deefour\Presenter\Exceptions\NotPresentableException;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use ReflectionClass;

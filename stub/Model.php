@@ -1,6 +1,6 @@
 <?php namespace Deefour\Presenter\Stubs;
 
-use Deefour\Presenter\Contracts\PresentableContract;
+use Deefour\Presenter\Contracts\Presentable as PresentableContract;
 use Deefour\Presenter\Presentable;
 use Illuminate\Support\Fluent;
 

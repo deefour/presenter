@@ -4,7 +4,7 @@ use BadMethodCallException;
 use Deefour\Presenter\Exceptions\UnknownPropertyException;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use Deefour\Presenter\Exceptions\NotPresentableException;
-use Deefour\Presenter\Contracts\PresentableContract;
+use Deefour\Presenter\Contracts\Presentable as PresentableContract;
 use Exception;
 use IteratorAggregate;
 
@@ -22,11 +22,9 @@ abstract class Presenter {
    * The raw model object being decorated by the presenter
    *
    * @protected
-   * @var Deefour\Presenter\Contracts\PresentableContract
+   * @var Deefour\Presenter\Contracts\Presentable
    */
   protected $model;
-
-  protected $finder;
 
 
 
@@ -38,12 +36,11 @@ abstract class Presenter {
   /**
    * Getter for the object this presenter is decorating
    *
-   * @return Deefour\Presenter\Contracts\PresentableContract
+   * @return Deefour\Presenter\Contracts\Presentable
    */
   public function model() {
     return $this->model;
   }
-
 
   /**
    * Magic getter. Provides property access to properties on the presenter,

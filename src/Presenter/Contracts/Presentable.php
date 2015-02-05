@@ -1,6 +1,6 @@
 <?php namespace Deefour\Presenter\Contracts;
 
-interface PresentableContract {
+interface Presentable {
 
   /**
    * Custom namespace for presenter class resolution

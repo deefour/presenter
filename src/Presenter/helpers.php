@@ -1,14 +1,14 @@
 <?php
 
 use Deefour\Presenter\Factory;
-use Deefour\Presenter\Contracts\PresentableContract;
+use Deefour\Presenter\Contracts\Presentable as PresentableContract;
 use Illuminate\Container\Container;
 
 if ( ! function_exists('presenter')) {
   /**
    * Instantiate and return a presenter wrapping the passed object
    *
-   * @param  Deefour\Presenter\Contracts\PresentableContract  $object
+   * @param  Deefour\Presenter\Contracts\Presentable  $object
    * @return Deefour\Presenter\Presenter
    */
   function presenter(PresentableContract $object) {

@@ -62,12 +62,12 @@ class Article {
 }
 ```
 
-The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\PresentableContract`. A `Deefour\Presenter\Presentable` trait is available to satisfy the interface with sensible defaults.
+The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\Presentable` trait is available to satisfy the interface with sensible defaults.
 
 ```php
 namespace App;
 
-use Deefour\Presenter\Contracts\PresentableContract;
+use Deefour\Presenter\Contracts\Presentable as PresentableContract;
 use Deefour\Presenter\Presentable;
 
 class Article implements PresentableContract {
