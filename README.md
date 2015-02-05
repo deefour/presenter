@@ -208,9 +208,15 @@ presenter($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 0.2.0 - February 5, 2015
+
+ - Fix service provider.
+ - Make global `presenter()` work with Laravel IoC container if it's available.
+ - Move trait.
+
 #### 0.1.0 - November 21, 2014
 
- - Initial release
+ - Initial release.
 
 ## License
 
