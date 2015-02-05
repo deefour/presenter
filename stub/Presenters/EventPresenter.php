@@ -1,5 +1,5 @@
 <?php namespace Deefour\Presenter\Stubs\Presenters;
 
-use Deefour\Presenter\AbstractPresenter;
+use Deefour\Presenter\Presenter;
 
-class EventPresenter extends AbstractPresenter { }
+class EventPresenter extends Presenter { }

@@ -9,7 +9,7 @@ if ( ! function_exists('presenter')) {
    * Instantiate and return a presenter wrapping the passed object
    *
    * @param  Deefour\Presenter\Contracts\PresentableContract  $object
-   * @return Deefour\Presenter\AbstractPresenter
+   * @return Deefour\Presenter\Presenter
    */
   function presenter(PresentableContract $object) {
     if (function_exists('app') and app() instanceof Container) {

@@ -19,7 +19,7 @@ interface PresentableContract {
   /**
    * Wrap this object in a newly instantiated presenter
    *
-   * @return Deefour\Presenter\AbstractPresenter
+   * @return Deefour\Presenter\Presenter
    */
   public function presenter();
 
