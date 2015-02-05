@@ -2,6 +2,7 @@
 
 use Deefour\Presenter\Factory;
 use Deefour\Presenter\Contracts\PresentableContract;
+use Illuminate\Container\Container;
 
 if ( ! function_exists('presenter')) {
   /**
@@ -11,6 +12,12 @@ if ( ! function_exists('presenter')) {
    * @return Deefour\Presenter\AbstractPresenter
    */
   function presenter(PresentableContract $object) {
-    return (new Factory)->makeOrFail($object);
+    if (function_exists('app') and app() instanceof Container) {
+      $factory = app('presenter');
+    } else {
+      $factory = new Factory;
+    }
+
+    return $factory->makeOrFail($object);
   }
 }
