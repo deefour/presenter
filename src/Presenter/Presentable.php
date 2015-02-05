@@ -1,4 +1,4 @@
-<?php namespace Deefour\Presenter\Traits;
+<?php namespace Deefour\Presenter;
 
 use Deefour\Presenter\Factory;
 

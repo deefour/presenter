@@ -1,6 +1,6 @@
 <?php namespace Deefour\Presenter\Stubs;
 
-use Deefour\Presenter\Traits\Presentable;
+use Deefour\Presenter\Presentable;
 
 class Tag {
 

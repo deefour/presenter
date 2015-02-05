@@ -8,7 +8,7 @@ use Deefour\Presenter\Contracts\PresentableContract;
 use Exception;
 use IteratorAggregate;
 
-abstract class AbstractPresenter {
+abstract class Presenter {
 
   /**
    * Whitelist of associations to decorate
