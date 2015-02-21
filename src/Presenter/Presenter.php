@@ -166,6 +166,11 @@ abstract class Presenter {
    * @return mixed
    */
   protected function wrapInPresenter($value) {
+    // Laravel relation
+    if (is_a($value, 'Illuminate\Database\Eloquent\Relations\Relation')) {
+      return $this->wrapInPresenter($value->getResults());
+    }
+
     if ( ! ($value instanceof IteratorAggregate) and ! ($value instanceof PresentableContract)) {
       return $value;
     }
