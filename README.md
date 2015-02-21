@@ -11,7 +11,7 @@ Object-oriented presentation logic.
 Add Presenter to your `composer.json` file and run `composer update`. See [Packagist](https://packagist.org/packages/deefour/presenter) for specific versions.
 
 ```
-"deefour/presenter": "~0.2.1"
+"deefour/presenter": "^0.2"
 ```
 
 **`>=PHP5.5.0` is required.**
@@ -207,6 +207,10 @@ presenter($article)->is_draft; //=> 'No'
 - Source Code: https://github.com/deefour/presenter
 
 ## Changelog
+
+#### 0.2.2 - February 20, 2015
+
+ - Updated support for Laravel's Eloquent relations. Relations are now fetched and converted to presenter-wrapped objects or collections when requested.
 
 #### 0.2.0 - February 5, 2015
 
