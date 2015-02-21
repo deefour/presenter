@@ -11,14 +11,6 @@ use IteratorAggregate;
 abstract class Presenter {
 
   /**
-   * Whitelist of associations to decorate
-   *
-   * @protected
-   * @var array
-   */
-  protected $associations = [];
-
-  /**
    * The raw model object being decorated by the presenter
    *
    * @protected
