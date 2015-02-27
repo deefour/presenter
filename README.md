@@ -208,6 +208,10 @@ presenter($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 0.2.3 - February 27, 2015
+
+ - `Illuminate\Support\Collection` instances and native PHP arrays can now be passed directly into the `presenter()` helper.
+
 #### 0.2.2 - February 20, 2015
 
  - Updated support for Laravel's Eloquent relations. Relations are now fetched and converted to presenter-wrapped objects or collections when requested.
