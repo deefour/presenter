@@ -81,10 +81,10 @@ abstract class Presenter {
    * @return boolean
    */
   public function __isset($property) {
-    try {
+    if (property_exists($this, $property)) {
       return isset($this->$property);
-    } catch (UnknownPropertyException $e) {
-      return false;
+    } else {
+      return isset($this->model->$property);
     }
   }
 
@@ -124,7 +124,7 @@ abstract class Presenter {
   protected function deriveReturnValue($property, array $args = []) {
     $method = $this->deriveMethodName($property);
 
-    if (isset($this->$property)) {
+    if (property_exists($this, $property)) {
       return $this->$property;
     }
 
