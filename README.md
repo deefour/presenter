@@ -208,6 +208,15 @@ presenter($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 0.3.0 - March 16, 2015
+
+ - Allow presenters to be explicitly requested, bypassing the model default. For example
+     ```php
+       $article = new Article;
+       echo get_class($article->presenter()); //=> 'ArticlePresenter'
+       echo get_class($article->presenter(FeaturedArticlePresenter::class)); //=> 'FeaturedArticlePresenter'
+     ```
+
 #### 0.2.3 - February 27, 2015
 
  - `Illuminate\Support\Collection` instances and native PHP arrays can now be passed directly into the `presenter()` helper.
