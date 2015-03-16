@@ -19,8 +19,9 @@ interface Presentable {
   /**
    * Wrap this object in a newly instantiated presenter
    *
+   * @param  string|object  $presenter  [optional]
    * @return Deefour\Presenter\Presenter
    */
-  public function presenter();
+  public function presenter($presenter = null);
 
 }

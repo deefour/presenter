@@ -12,9 +12,10 @@ if ( ! function_exists('presenter')) {
    * Instantiate and return a presenter wrapping the passed object
    *
    * @param  Deefour\Presenter\Contracts\Presentable|mixed  $object
+   * @param  string  $presenter  [optional]
    * @return Deefour\Presenter\Presenter
    */
-  function presenter($object) {
+  function presenter($object, $presenter = null) {
     $collection = null;
 
     if ($object instanceof Collection) {
@@ -27,7 +28,7 @@ if ( ! function_exists('presenter')) {
       $objects = [];
 
       foreach ($collection as $item) {
-        $objects[] = presenter($item);
+        $objects[] = presenter($item, $presenter);
       }
 
       if ($object instanceof Collection) {
@@ -43,6 +44,6 @@ if ( ! function_exists('presenter')) {
       $factory = new Factory;
     }
 
-    return $factory->makeOrFail($object);
+    return $factory->makeOrFail($object, $presenter);
   }
 }

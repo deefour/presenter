@@ -21,8 +21,8 @@ trait Presentable {
   /**
    * @inheritdoc
    */
-  public function presenter() {
-    return (new Factory)->makeOrFail($this);
+  public function presenter($presenter = null) {
+    return (new Factory)->makeOrFail($this, $presenter);
   }
 
 }
