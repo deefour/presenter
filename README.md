@@ -27,7 +27,7 @@ The `resolve()` method will generate a FQCN for the passed object. No check is p
 ```php
 use Deefour\Presenter\Factory;
 
-(new Factory)->resolve(new Article); //=> "ArticlePresenter"
+(new Factory)->resolve(new Article); //=> "App\Presenters\ArticlePresenter"
 ```
 
 ### Presenter Instantiation
@@ -37,10 +37,22 @@ The `make()` method will attempt to instantiate the resolved FQCN for the passed
 ```php
 use Deefour\Presenter\Factory;
 
-(new Factory)->make(new Article); //=> ArticlePresenter
+(new Factory)->make(new Article); //=> App\Presenters\ArticlePresenter
 ```
 
 > **Note:** There is a similar `makeOrFail()` method that will throw an exception if the presenter class does not exist.
+
+#### Resolving a Specific Presenter
+
+A second, optional argument, can be passed to `make()` and `makeOrFail()` to tell the factory which presenter class to wrap the source object with. This allows for a different presenter to be used for a single source object depending on the context.
+
+```php
+use Deefour\Presenter\Factory;
+use App\Presenters\FeaturedArticlePresenter;
+
+(new Factory)->make(new Article, FeaturedArticlePresenter::class); //=> App\Presenters\FeaturedArticlePresenter
+```
+
 
 #### Preparing Models for Presentation
 
@@ -210,12 +222,7 @@ presenter($article)->is_draft; //=> 'No'
 
 #### 0.3.0 - March 16, 2015
 
- - Allow presenters to be explicitly requested, bypassing the model default. For example
-     ```php
-       $article = new Article;
-       echo get_class($article->presenter()); //=> 'ArticlePresenter'
-       echo get_class($article->presenter(FeaturedArticlePresenter::class)); //=> 'FeaturedArticlePresenter'
-     ```
+ - Allow presenters to be explicitly requested, bypassing the model default.
 
 #### 0.2.3 - February 27, 2015
 
