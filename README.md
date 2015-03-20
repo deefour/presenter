@@ -11,7 +11,7 @@ Object-oriented presentation logic.
 Add Presenter to your `composer.json` file and run `composer update`. See [Packagist](https://packagist.org/packages/deefour/presenter) for specific versions.
 
 ```
-"deefour/presenter": "~0.2"
+"deefour/presenter": "~0.4.0"
 ```
 
 **`>=PHP5.5.0` is required.**
@@ -27,7 +27,7 @@ The `resolve()` method will generate a FQCN for the passed object. No check is p
 ```php
 use Deefour\Presenter\Factory;
 
-(new Factory)->resolve(new Article); //=> "App\Presenters\ArticlePresenter"
+(new Factory)->resolve(new Article); //=> "ArticlePresenter"
 ```
 
 ### Presenter Instantiation
@@ -37,22 +37,10 @@ The `make()` method will attempt to instantiate the resolved FQCN for the passed
 ```php
 use Deefour\Presenter\Factory;
 
-(new Factory)->make(new Article); //=> App\Presenters\ArticlePresenter
+(new Factory)->make(new Article); //=> ArticlePresenter
 ```
 
 > **Note:** There is a similar `makeOrFail()` method that will throw an exception if the presenter class does not exist.
-
-#### Resolving a Specific Presenter
-
-A second, optional argument, can be passed to `make()` and `makeOrFail()` to tell the factory which presenter class to wrap the source object with. This allows for a different presenter to be used for a single source object depending on the context.
-
-```php
-use Deefour\Presenter\Factory;
-use App\Presenters\FeaturedArticlePresenter;
-
-(new Factory)->make(new Article, FeaturedArticlePresenter::class); //=> App\Presenters\FeaturedArticlePresenter
-```
-
 
 #### Preparing Models for Presentation
 
@@ -74,17 +62,17 @@ class Article {
 }
 ```
 
-The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\Presentable` trait is available to satisfy the interface with sensible defaults.
+The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\ResolvesPresenters` trait is available to satisfy the interface with sensible defaults.
 
 ```php
 namespace App;
 
-use Deefour\Presenter\Contracts\Presentable as PresentableContract;
-use Deefour\Presenter\Presentable;
+use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Presenter\ResolvesPresenters;
 
-class Article implements PresentableContract {
+class Article implements Presentable {
 
-  use Presentable;
+  use ResolvesPresenters;
 
   /**
    * @inheritdoc
@@ -207,10 +195,23 @@ Presenter comes with a service provider for the `Deefour\Presenter\Factory` pres
 
 ### Helper Methods
 
-A `presenter()`  global function is available to generate a presenter for an object anywhere within an application. In a view, the following could be done
+A global `present()` function can be made globally available by including the `helpers.php` file in your project's `composer.json`. Presenter doesn't autoload this file, giving you the choice whether or not to 'pollute' the global environment with this function.
 
 ```php
-presenter($article)->is_draft; //=> 'No'
+"autoload": {
+  "psr-4": {
+    ...
+  },
+  "files": [
+    "vendor/deefour/presenter/src/Presenter/helpers.php"
+  ]
+}
+```
+
+In a view, the following could be done
+
+```php
+present($article)->is_draft; //=> 'No'
 ```
 
 ## Contribute
@@ -220,9 +221,22 @@ presenter($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 0.4.0 - March 19, 2015
+
+ - Rename `presenter()` helper to `present()`
+ - Remove `helpers.php` from Composer autoload. Developers should be able to choose whether these functions are included.
+ - Cleaning docblocks.
+ - Type-hinting the presenter factory.
+ - Renaming `Presentable` trait to `ResolvesPresenters` to avoid naming conflict with `\Deefour\Presenter\Contracts\Presentable`.
+
 #### 0.3.0 - March 16, 2015
 
- - Allow presenters to be explicitly requested, bypassing the model default.
+ - Allow presenters to be explicitly requested, bypassing the model default. For example
+     ```php
+       $article = new Article;
+       echo get_class($article->presenter()); //=> 'ArticlePresenter'
+       echo get_class($article->presenter(FeaturedArticlePresenter::class)); //=> 'FeaturedArticlePresenter'
+     ```
 
 #### 0.2.3 - February 27, 2015
 

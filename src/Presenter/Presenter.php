@@ -4,7 +4,7 @@ use BadMethodCallException;
 use Deefour\Presenter\Exceptions\UnknownPropertyException;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use Deefour\Presenter\Exceptions\NotPresentableException;
-use Deefour\Presenter\Contracts\Presentable as PresentableContract;
+use Deefour\Presenter\Contracts\Presentable;
 use Exception;
 use IteratorAggregate;
 
@@ -14,13 +14,13 @@ abstract class Presenter {
    * The raw model object being decorated by the presenter
    *
    * @protected
-   * @var Deefour\Presenter\Contracts\Presentable
+   * @var Presentable
    */
   protected $model;
 
 
 
-  public function __construct(PresentableContract $model) {
+  public function __construct(Presentable $model) {
     $this->model   = $model;
     $this->factory = new Factory;
   }
@@ -28,7 +28,7 @@ abstract class Presenter {
   /**
    * Getter for the object this presenter is decorating
    *
-   * @return Deefour\Presenter\Contracts\Presentable
+   * @return Presentable
    */
   public function model() {
     return $this->model;
@@ -81,7 +81,11 @@ abstract class Presenter {
    * @return boolean
    */
   public function __isset($property) {
-    if (property_exists($this, $property)) {
+    $method = $this->deriveMethodName($property);
+
+    if (method_exists($this, $method) or method_exists($this->model, $method)) {
+      return true;
+    } else if (property_exists($this, $property)) {
       return isset($this->$property);
     } else {
       return isset($this->model->$property);
@@ -163,7 +167,7 @@ abstract class Presenter {
       return $this->wrapInPresenter($value->getResults());
     }
 
-    if ( ! ($value instanceof IteratorAggregate) and ! ($value instanceof PresentableContract)) {
+    if ( ! ($value instanceof IteratorAggregate) and ! ($value instanceof Presentable)) {
       return $value;
     }
 

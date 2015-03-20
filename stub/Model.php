@@ -1,12 +1,12 @@
 <?php namespace Deefour\Presenter\Stubs;
 
-use Deefour\Presenter\Contracts\Presentable as PresentableContract;
-use Deefour\Presenter\Presentable;
+use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Presenter\ResolvesPresenters;
 use Illuminate\Support\Fluent;
 
-abstract class Model extends Fluent implements PresentableContract {
+abstract class Model extends Fluent implements Presentable {
 
-  use Presentable;
+  use ResolvesPresenters;
 
   /**
    * @inheritdoc

@@ -1,21 +1,18 @@
 <?php
 
 use Deefour\Presenter\Factory;
-use Deefour\Presenter\Contracts\Presentable as PresentableContract;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 
-
-
-if ( ! function_exists('presenter')) {
+if ( ! function_exists('present')) {
   /**
    * Instantiate and return a presenter wrapping the passed object
    *
-   * @param  Deefour\Presenter\Contracts\Presentable|mixed  $object
+   * @param  Presentable|mixed  $object
    * @param  string  $presenter  [optional]
    * @return Deefour\Presenter\Presenter
    */
-  function presenter($object, $presenter = null) {
+  function present($object, $presenter = null) {
     $collection = null;
 
     if ($object instanceof Collection) {

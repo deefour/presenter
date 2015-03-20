@@ -2,7 +2,7 @@
 
 use Deefour\Presenter\Factory;
 
-trait Presentable {
+trait ResolvesPresenters {
 
   /**
    * @inheritdoc
@@ -22,7 +22,13 @@ trait Presentable {
    * @inheritdoc
    */
   public function presenter($presenter = null) {
-    return (new Factory)->makeOrFail($this, $presenter);
+    $factory = new Factory;
+
+    // Ensure the class using this trait is implementing the Presentable contract
+    // and throw a graceful error otherwise.
+    $factory->resolve($this);
+
+    return $factory->makeOrFail($this, $presenter);
   }
 
 }

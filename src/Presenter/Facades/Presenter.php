@@ -1,8 +1,7 @@
 <?php namespace Deefour\Presenter\Facades;
 
 /**
- * @see \Illuminate\Auth\AuthManager
- * @see \Illuminate\Auth\Guard
+ * @see \Deefour\Presenter\Factory
  */
 class Presenter extends Facade {
 

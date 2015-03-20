@@ -1,7 +1,7 @@
 <?php namespace Deefour\Presenter;
 
 use Deefour\Presenter\Presenter;
-use Deefour\Presenter\Contracts\Presentable as PresentableContract;
+use Deefour\Presenter\Contracts\Presentable;
 use Deefour\Presenter\Exceptions\NotPresentableException;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use ReflectionClass;
@@ -12,11 +12,11 @@ class Factory {
    * Derives a presenter class name fo rthe object the finder was passed when
    * instantiated. There is no check made here to see if the class actually exists.
    *
-   * @param  Deefour\Presenter\Contracts\Presentable|mixed  $object
+   * @param  Presentable  $object
    * @param  string  $presenter  [optional]
    * @return string
    */
-  public function make($object, $presenter = null) {
+  public function make(Presentable $object, $presenter = null) {
     $presenter = $this->resolve($object, $presenter);
 
     if ( ! $this->isValidPresenter($presenter)) {
@@ -30,15 +30,18 @@ class Factory {
    * Derives a presenter class name fo rthe object the finder was passed when
    * instantiated. If the presenter does not exists an exception is thrown.
    *
-   * @param  Deefour\Presenter\Contracts\Presentable|mixed  $object
+   * @param  Presentable  $object
    * @param  string  $presenter  [optional]
-   * @throws Deefour\Presenter\Exceptions\NotDefinedException
+   * @throws NotDefinedException
    */
-  public function makeOrFail($object, $presenter = null) {
+  public function makeOrFail(Presentable $object, $presenter = null) {
     $presenter = $this->resolve($object, $presenter);
 
     if ( ! $this->isValidPresenter($presenter)) {
-      throw new NotDefinedException(sprintf('Unable to find presenter class for `%s`', get_class($object)));
+      throw new NotDefinedException(sprintf(
+        'Unable to find presenter class for [%s]',
+        get_class($object)
+      ));
     }
 
     return $this->make($object, $presenter);
@@ -47,13 +50,19 @@ class Factory {
   /**
    * Derives the class name for the object the finder was passed when instantiated.
    *
-   * @throws Deefour\Presenter\Exceptions\NotAuthorizableException
+   * @throws NotPresentableException
+   * @param  string|Presentable  $object
    * @param  string  $presenter  [optional]
    * @return string
    */
   public function resolve($object, $presenter = null) {
-    if ( ! ($object instanceof PresentableContract)) {
-      throw new NotPresentableException(sprintf('The `%s` object does not implement `%s`; presentation cannot be performed', get_class($object), PresentableContract::class));
+    if ( ! ($object instanceof Presentable)) {
+      throw new NotPresentableException(sprintf(
+        'The `%s` object does not implement `%s`; presentation cannot' .
+        ' be performed',
+        get_class($object),
+        Presentable::class
+      ));
     }
 
     if ( ! is_null($presenter)) {
