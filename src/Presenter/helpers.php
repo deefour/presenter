@@ -25,7 +25,7 @@ if ( ! function_exists('present')) {
       $objects = [];
 
       foreach ($collection as $item) {
-        $objects[] = presenter($item, $presenter);
+        $objects[] = present($item, $presenter);
       }
 
       if ($object instanceof Collection) {
