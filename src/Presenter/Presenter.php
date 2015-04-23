@@ -64,7 +64,7 @@ abstract class Presenter {
    * @param  array  $args
    * @return mixed
    */
-  public function __call($method, $args) {
+  public function __call($method, array $args) {
     try {
       $value = $this->deriveReturnValue($method, $args);
     } catch (UnknownPropertyException $e) {
