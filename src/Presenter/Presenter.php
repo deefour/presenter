@@ -18,6 +18,13 @@ abstract class Presenter {
    */
   protected $model;
 
+  /**
+   * A static mapping of snake-to-camel cased conversions.
+   *
+   * @var array
+   */
+  protected static $caseMappingCache = [];
+
 
 
   public function __construct(Presentable $model) {
@@ -102,9 +109,16 @@ abstract class Presenter {
    * @return string
    */
   protected function deriveMethodName($property) {
-    $property = ucwords(str_replace(array('-', '_'), ' ', $property));
+    if (in_array($property, static::$caseMappingCache)) {
+      return static::$caseMappingCache[$property];
+    }
 
-    return lcfirst(str_replace(' ', '', $property));
+    $converted = ucwords(str_replace(array('-', '_'), ' ', $property));
+    $converted = lcfirst(str_replace(' ', '', $converted));
+
+    static::$caseMappingCache[$property] = $converted;
+
+    return $converted;
   }
 
   /**
