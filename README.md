@@ -221,6 +221,11 @@ present($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 0.5.0 - April 27, 2015
+
+ - Snake-case to camel-case method conversions are now cached for performance
+ - Exceptions are no longer thrown for missing properties/methods. See [`6f33dda`](https://github.com/deefour/presenter/commit/6f33dda7f310d95646091e6e5392ffd66d81ba00) for an explanation.
+
 #### 0.4.0 - March 19, 2015
 
  - Rename `presenter()` helper to `present()`
