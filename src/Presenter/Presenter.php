@@ -1,7 +1,6 @@
 <?php namespace Deefour\Presenter;
 
 use BadMethodCallException;
-use Deefour\Presenter\Exceptions\UnknownPropertyException;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use Deefour\Presenter\Exceptions\NotPresentableException;
 use Deefour\Presenter\Contracts\Presentable;
@@ -54,13 +53,7 @@ abstract class Presenter {
       return $this->model; // don't decorate the model
     }
 
-    try {
-      $value = $this->deriveReturnValue($property);
-    } catch (UnknownPropertyException $e) {
-      return null;
-    }
-
-    return $this->wrapInPresenter($value);
+    return $this->derive($property);
   }
 
   /**
@@ -72,13 +65,7 @@ abstract class Presenter {
    * @return mixed
    */
   public function __call($method, array $args) {
-    try {
-      $value = $this->deriveReturnValue($method, $args);
-    } catch (UnknownPropertyException $e) {
-      throw new BadMethodCallException(sprintf('The `%s` method does not exist on the `%s` presenter or underlying `%s` model', $method, static::class, get_class($this->model)));
-    }
-
-    return $this->wrapInPresenter($value);
+    return $this->derive($method, $args);
   }
 
   /**
@@ -99,7 +86,18 @@ abstract class Presenter {
     }
   }
 
+  /**
+   * Derive the return value and wrap it in it's presenter if possible.
+   *
+   * @param  string  $property
+   * @param  array  $args  [optional]
+   * @return mixed
+   */
+  protected function derive($property, array $args = []) {
+    $value = $this->deriveReturnValue($property, $args);
 
+    return $this->wrapInPresenter($value);
+  }
 
   /**
    * Snake-to-camel-case string conversion.
@@ -140,16 +138,15 @@ abstract class Presenter {
    * @return mixed
    */
   protected function deriveReturnValue($property, array $args = []) {
-    $method = $this->deriveMethodName($property);
-
     if (property_exists($this, $property)) {
       return $this->$property;
     }
 
+    $method = $this->deriveMethodName($property);
+
     if (method_exists($this, $method)) {
       return call_user_func_array([ $this, $method ], $args);
     }
-
 
     if (isset($this->model->$property)) {
       return $this->model->$property;
@@ -159,7 +156,7 @@ abstract class Presenter {
       return call_user_func_array([$this->model, $method], $args);
     }
 
-    throw new UnknownPropertyException(sprintf('No property or method could be derived from the passed `%s` attribute', $property));
+    return null;
   }
 
   /**
