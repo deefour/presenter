@@ -35,7 +35,7 @@ if ( ! function_exists('present')) {
       return $objects;
     }
 
-    if (function_exists('app') and app() instanceof Container) {
+    if (function_exists('app') && app() instanceof Container) {
       $factory = app('presenter');
     } else {
       $factory = new Factory;

@@ -18,6 +18,13 @@ abstract class Presenter {
   protected $model;
 
   /**
+   * The presenter factory instance.
+   *
+   * @var Factory
+   */
+  protected $factory;
+
+  /**
    * A static mapping of snake-to-camel cased conversions.
    *
    * @var array
@@ -77,7 +84,7 @@ abstract class Presenter {
   public function __isset($property) {
     $method = $this->deriveMethodName($property);
 
-    if (method_exists($this, $method) or method_exists($this->model, $method)) {
+    if (method_exists($this, $method) || method_exists($this->model, $method)) {
       return true;
     } else if (property_exists($this, $property)) {
       return isset($this->$property);
@@ -178,7 +185,7 @@ abstract class Presenter {
       return $this->wrapInPresenter($value->getResults());
     }
 
-    if ( ! ($value instanceof IteratorAggregate) and ! ($value instanceof Presentable)) {
+    if ( ! ($value instanceof IteratorAggregate) && ! ($value instanceof Presentable)) {
       return $value;
     }
 

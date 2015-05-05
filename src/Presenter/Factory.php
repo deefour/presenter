@@ -92,7 +92,7 @@ class Factory {
       $className = get_class($className);
     }
 
-    return class_exists($className) and is_a($className, Presenter::class, true);
+    return class_exists($className) && is_a($className, Presenter::class, true);
   }
 
 }
