@@ -6,6 +6,7 @@ use Deefour\Presenter\Exceptions\NotPresentableException;
 use Deefour\Presenter\Contracts\Presentable;
 use Exception;
 use IteratorAggregate;
+use ReflectionProperty;
 
 abstract class Presenter {
 
@@ -15,14 +16,14 @@ abstract class Presenter {
    * @protected
    * @var Presentable
    */
-  protected $model;
+  public $_model;
 
   /**
    * The presenter factory instance.
    *
    * @var Factory
    */
-  protected $factory;
+  protected $_factory;
 
   /**
    * A static mapping of snake-to-camel cased conversions.
@@ -34,17 +35,8 @@ abstract class Presenter {
 
 
   public function __construct(Presentable $model) {
-    $this->model   = $model;
-    $this->factory = new Factory;
-  }
-
-  /**
-   * Getter for the object this presenter is decorating
-   *
-   * @return Presentable
-   */
-  public function model() {
-    return $this->model;
+    $this->_model   = $model;
+    $this->_factory = new Factory;
   }
 
   /**
@@ -56,10 +48,6 @@ abstract class Presenter {
    * @return mixed
    */
   public function __get($property) {
-    if ($property === 'model') {
-      return $this->model; // don't decorate the model
-    }
-
     return $this->derive($property);
   }
 
@@ -84,12 +72,12 @@ abstract class Presenter {
   public function __isset($property) {
     $method = $this->deriveMethodName($property);
 
-    if (method_exists($this, $method) || method_exists($this->model, $method)) {
+    if (method_exists($this, $method) || method_exists($this->_model, $method)) {
       return true;
     } else if (property_exists($this, $property)) {
       return isset($this->$property);
     } else {
-      return isset($this->model->$property);
+      return isset($this->_model->$property);
     }
   }
 
@@ -138,6 +126,8 @@ abstract class Presenter {
    * isset is used in favor of property_exists to play nicely with __isset
    * implementations on the presentable object model.
    *
+   * Property access is denied for protected/private properties.
+   *
    * This will fail loudly if the property/method could not be derived.
    *
    * @param  string  $property
@@ -145,7 +135,7 @@ abstract class Presenter {
    * @return mixed
    */
   protected function deriveReturnValue($property, array $args = []) {
-    if (property_exists($this, $property)) {
+    if (property_exists($this, $property) && (new ReflectionProperty($this, $property))->isPublic()) {
       return $this->$property;
     }
 
@@ -155,12 +145,12 @@ abstract class Presenter {
       return call_user_func_array([ $this, $method ], $args);
     }
 
-    if (isset($this->model->$property)) {
-      return $this->model->$property;
+    if (isset($this->_model->$property)) {
+      return $this->_model->$property;
     }
 
-    if (method_exists($this->model, $method)) {
-      return call_user_func_array([$this->model, $method], $args);
+    if (method_exists($this->_model, $method)) {
+      return call_user_func_array([$this->_model, $method], $args);
     }
 
     return null;
@@ -201,7 +191,7 @@ abstract class Presenter {
     }
 
     try {
-      $presenter = $this->factory->makeOrFail($value);
+      $presenter = $this->_factory->makeOrFail($value);
 
       return new $presenter($value);
     } catch (Exception $e) {

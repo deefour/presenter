@@ -2,4 +2,10 @@
 
 use Deefour\Presenter\Presenter;
 
-class CategoryPresenter extends Presenter { }
+class CategoryPresenter extends Presenter {
+
+  protected $unavailable = true;
+
+  public $available = true;
+
+}

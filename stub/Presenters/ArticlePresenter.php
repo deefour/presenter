@@ -5,7 +5,7 @@ use Deefour\Presenter\Presenter;
 class ArticlePresenter extends Presenter {
 
   public function title() {
-    return ucwords($this->model->title);
+    return ucwords($this->_model->title);
   }
 
 }

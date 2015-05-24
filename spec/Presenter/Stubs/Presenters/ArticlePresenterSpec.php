@@ -21,15 +21,18 @@ class ArticlePresenterSpec extends ObjectBehavior {
   }
 
   function it_should_allow_property_access_to_underlying_model() {
-    $this->model->shouldBeAnInstanceOf(Article::class);
-    $this->model()->shouldBeAnInstanceOf(Article::class);
+    $this->_model->shouldBeAnInstanceOf(Article::class);
   }
 
   function it_should_map_snake_case_property_to_camel_case_model_method() {
     $this->is_active->shouldBe(true);
 
-    $this->model->title->shouldBe('sample article');
+    $this->_model->title->shouldBe('sample article');
     $this->title->shouldBe('Sample Article');
+  }
+
+  function it_should_not_respond_to_model_access_without_underscore_prefix() {
+    $this->model->shouldBe(null);
   }
 
   function it_should_pass_unknown_method_through_to_model() {
