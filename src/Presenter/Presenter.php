@@ -29,7 +29,7 @@ abstract class Presenter {
    *
    * @var array
    */
-  protected static $caseMappingCache = [ ];
+  protected static $_caseMappingCache = [ ];
 
   /**
    * Constructor.
@@ -51,7 +51,7 @@ abstract class Presenter {
    * @return mixed
    */
   public function __get($property) {
-    return $this->derive($property);
+    return $this->_derive($property);
   }
 
   /**
@@ -64,7 +64,7 @@ abstract class Presenter {
    * @return mixed
    */
   public function __call($method, array $args) {
-    return $this->derive($method, $args);
+    return $this->_derive($method, $args);
   }
 
   /**
@@ -75,7 +75,7 @@ abstract class Presenter {
    * @return boolean
    */
   public function __isset($property) {
-    $method = $this->deriveMethodName($property);
+    $method = $this->_deriveMethodName($property);
 
     if (method_exists($this, $method) || method_exists($this->_model, $method)) {
       return true;
@@ -95,15 +95,15 @@ abstract class Presenter {
    *
    * @return string
    */
-  protected function deriveMethodName($property) {
-    if (in_array($property, static::$caseMappingCache)) {
-      return static::$caseMappingCache[ $property ];
+  protected function _deriveMethodName($property) {
+    if (in_array($property, static::$_caseMappingCache)) {
+      return static::$_caseMappingCache[ $property ];
     }
 
     $converted = ucwords(str_replace([ '-', '_' ], ' ', $property));
     $converted = lcfirst(str_replace(' ', '', $converted));
 
-    static::$caseMappingCache[ $property ] = $converted;
+    static::$_caseMappingCache[ $property ] = $converted;
 
     return $converted;
   }
@@ -129,12 +129,12 @@ abstract class Presenter {
    *
    * @return mixed
    */
-  protected function derive($property, array $args = [ ]) {
+  protected function _derive($property, array $args = [ ]) {
     if (property_exists($this, $property) && (new ReflectionProperty($this, $property))->isPublic()) {
       return $this->$property;
     }
 
-    $method = $this->deriveMethodName($property);
+    $method = $this->_deriveMethodName($property);
 
     if (method_exists($this, $method)) {
       return $this->decorate(call_user_func_array([ $this, $method ], $args));
