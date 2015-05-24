@@ -228,6 +228,10 @@ present($article)->is_draft; //=> 'No'
  attribute with the name `'model'`.
  - Presenters now only provide property access to **public** properties on the
  presenter.
+ - Prefixed API methods/properties with `_` on the base presenter to further avoid
+ conflicts with attribute overrides.
+ - Made `$_model` property public.
+ - Updates to code formatting.
 
 #### 0.5.0 - April 27, 2015
 
