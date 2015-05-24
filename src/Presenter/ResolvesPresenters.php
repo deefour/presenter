@@ -1,7 +1,5 @@
 <?php namespace Deefour\Presenter;
 
-use Deefour\Presenter\Factory;
-
 trait ResolvesPresenters {
 
   /**

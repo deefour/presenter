@@ -1,3 +1,4 @@
 <?php namespace Deefour\Presenter\Stubs;
 
-class Event extends Model { }
+class Event extends Model {
+}

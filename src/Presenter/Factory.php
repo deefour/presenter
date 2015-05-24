@@ -1,19 +1,20 @@
 <?php namespace Deefour\Presenter;
 
-use Deefour\Presenter\Presenter;
 use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\Exceptions\NotPresentableException;
 use Deefour\Presenter\Exceptions\NotDefinedException;
+use Deefour\Presenter\Exceptions\NotPresentableException;
 use ReflectionClass;
 
 class Factory {
 
   /**
    * Derives a presenter class name fo rthe object the finder was passed when
-   * instantiated. There is no check made here to see if the class actually exists.
+   * instantiated. There is no check made here to see if the class actually
+   * exists.
    *
-   * @param  Presentable  $object
-   * @param  string  $presenter  [optional]
+   * @param  Presentable $object
+   * @param  string      $presenter [optional]
+   *
    * @return string
    */
   public function make(Presentable $object, $presenter = null) {
@@ -27,11 +28,13 @@ class Factory {
   }
 
   /**
-   * Derives a presenter class name fo rthe object the finder was passed when
+   * Derives a presenter class name for the object the finder was passed when
    * instantiated. If the presenter does not exists an exception is thrown.
    *
-   * @param  Presentable  $object
-   * @param  string  $presenter  [optional]
+   * @param  Presentable $object
+   * @param  string      $presenter [optional]
+   *
+   * @return string
    * @throws NotDefinedException
    */
   public function makeOrFail(Presentable $object, $presenter = null) {
@@ -48,11 +51,14 @@ class Factory {
   }
 
   /**
-   * Derives the class name for the object the finder was passed when instantiated.
+   * Derives the class name for the object the finder was passed when
+   * instantiated.
    *
    * @throws NotPresentableException
-   * @param  string|Presentable  $object
-   * @param  string  $presenter  [optional]
+   *
+   * @param  string|Presentable $object
+   * @param  string             $presenter [optional]
+   *
    * @return string
    */
   public function resolve($object, $presenter = null) {
@@ -84,7 +90,8 @@ class Factory {
   /**
    * Ensures the FQCN passed maps to a valid, existing presenter class.
    *
-   * @param  string|object  $className
+   * @param  string|object $className
+   *
    * @return boolean
    */
   protected function isValidPresenter($className) {

@@ -8,21 +8,22 @@ if ( ! function_exists('present')) {
   /**
    * Instantiate and return a presenter wrapping the passed object
    *
-   * @param  Presentable|mixed  $object
-   * @param  string  $presenter  [optional]
+   * @param  Presentable|mixed $object
+   * @param  string            $presenter [optional]
+   *
    * @return Deefour\Presenter\Presenter
    */
   function present($object, $presenter = null) {
     $collection = null;
 
     if ($object instanceof Collection) {
-     $collection = $object->all();
+      $collection = $object->all();
     } elseif (is_array($object)) {
       $collection = $object;
     }
 
     if ( ! is_null($collection)) {
-      $objects = [];
+      $objects = [ ];
 
       foreach ($collection as $item) {
         $objects[] = present($item, $presenter);

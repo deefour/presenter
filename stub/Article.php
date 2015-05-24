@@ -30,7 +30,7 @@ class Article extends Model {
   public function relatedEvents() {
     $events = new Collection;
 
-    for ($i=0; $i<3; $i++) {
+    for ($i = 0; $i < 3; $i++) {
       $events->push(new Event);
     }
 

@@ -1,3 +1,4 @@
 <?php namespace Deefour\Presenter\Stubs;
 
-class Author extends Model { }
+class Author extends Model {
+}

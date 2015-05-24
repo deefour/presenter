@@ -1,5 +1,7 @@
 <?php namespace Deefour\Presenter\Contracts;
 
+use Deefour\Presenter\Presenter;
+
 interface Presentable {
 
   /**
@@ -19,8 +21,9 @@ interface Presentable {
   /**
    * Wrap this object in a newly instantiated presenter
    *
-   * @param  string|object  $presenter  [optional]
-   * @return Deefour\Presenter\Presenter
+   * @param  string|object $presenter [optional]
+   *
+   * @return Presenter
    */
   public function presenter($presenter = null);
 

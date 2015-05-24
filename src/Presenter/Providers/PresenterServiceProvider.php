@@ -12,15 +12,13 @@ class PresenterServiceProvider extends ServiceProvider {
    */
   protected $defer = true;
 
-
-
   /**
    * Register the service provider.
    *
    * @return void
    */
   public function register() {
-    $this->app->bindShared('presenter', function() {
+    $this->app->bindShared('presenter', function () {
       return new Factory;
     });
   }

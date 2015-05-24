@@ -1,9 +1,7 @@
 <?php namespace Deefour\Presenter;
 
-use BadMethodCallException;
-use Deefour\Presenter\Exceptions\NotDefinedException;
-use Deefour\Presenter\Exceptions\NotPresentableException;
 use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Presenter\Exceptions\NotDefinedException;
 use Exception;
 use IteratorAggregate;
 use ReflectionProperty;
@@ -30,10 +28,13 @@ abstract class Presenter {
    *
    * @var array
    */
-  protected static $caseMappingCache = [];
+  protected static $caseMappingCache = [ ];
 
-
-
+  /**
+   * Constructor.
+   *
+   * @param Presentable $model
+   */
   public function __construct(Presentable $model) {
     $this->_model   = $model;
     $this->_factory = new Factory;
@@ -44,7 +45,8 @@ abstract class Presenter {
    * properties on the underlying model, and methods on each by converting the
    * snake-cased property name into camel case.
    *
-   * @param  string  $property
+   * @param  string $property
+   *
    * @return mixed
    */
   public function __get($property) {
@@ -55,8 +57,9 @@ abstract class Presenter {
    * Magic caller (ie. missing method handler). Provides transparent access to
    * methods on the model.
    *
-   * @param  string  $method
+   * @param  string $method
    * @param  array  $args
+   *
    * @return mixed
    */
   public function __call($method, array $args) {
@@ -66,7 +69,8 @@ abstract class Presenter {
   /**
    * Magic isset.
    *
-   * @param  string  $property
+   * @param  string $property
+   *
    * @return boolean
    */
   public function __isset($property) {
@@ -84,11 +88,12 @@ abstract class Presenter {
   /**
    * Derive the return value and wrap it in it's presenter if possible.
    *
-   * @param  string  $property
-   * @param  array  $args  [optional]
+   * @param  string $property
+   * @param  array  $args [optional]
+   *
    * @return mixed
    */
-  protected function derive($property, array $args = []) {
+  protected function derive($property, array $args = [ ]) {
     $value = $this->deriveReturnValue($property, $args);
 
     return $this->wrapInPresenter($value);
@@ -98,18 +103,20 @@ abstract class Presenter {
    * Snake-to-camel-case string conversion.
    *
    * @link https://github.com/illuminate/support/blob/master/Str.php
-   * @param  string  $property
+   *
+   * @param  string $property
+   *
    * @return string
    */
   protected function deriveMethodName($property) {
     if (in_array($property, static::$caseMappingCache)) {
-      return static::$caseMappingCache[$property];
+      return static::$caseMappingCache[ $property ];
     }
 
-    $converted = ucwords(str_replace(array('-', '_'), ' ', $property));
+    $converted = ucwords(str_replace([ '-', '_' ], ' ', $property));
     $converted = lcfirst(str_replace(' ', '', $converted));
 
-    static::$caseMappingCache[$property] = $converted;
+    static::$caseMappingCache[ $property ] = $converted;
 
     return $converted;
   }
@@ -130,11 +137,12 @@ abstract class Presenter {
    *
    * This will fail loudly if the property/method could not be derived.
    *
-   * @param  string  $property
-   * @param  array  $args  [optional]
+   * @param  string $property
+   * @param  array  $args [optional]
+   *
    * @return mixed
    */
-  protected function deriveReturnValue($property, array $args = []) {
+  protected function deriveReturnValue($property, array $args = [ ]) {
     if (property_exists($this, $property) && (new ReflectionProperty($this, $property))->isPublic()) {
       return $this->$property;
     }
@@ -150,23 +158,26 @@ abstract class Presenter {
     }
 
     if (method_exists($this->_model, $method)) {
-      return call_user_func_array([$this->_model, $method], $args);
+      return call_user_func_array([ $this->_model, $method ], $args);
     }
 
     return null;
   }
 
   /**
-   * When a property or method is requested through the presenter, an attempt is
+   * When a property or method is requested through the presenter, an attempt
+   * is
    * made to wrap the return value in it's own presenter.
    *
-   * If the attempt fails due to no presenter existing for the presentable object,
-   * or if the object simply isn't presentable, the raw value will instead be returned.
+   * If the attempt fails due to no presenter existing for the presentable
+   * object, or if the object simply isn't presentable, the raw value will
+   * instead be returned.
    *
    * Support is available for IteratorAggregate instances, looping through the
    * collection and attempting to wrap each object in it's own presenter.
    *
-   * @param  mixed  $value
+   * @param  mixed $value
+   *
    * @return mixed
    */
   protected function wrapInPresenter($value) {
@@ -181,7 +192,7 @@ abstract class Presenter {
 
     if ($value instanceof IteratorAggregate) {
       $collection = get_class($value);
-      $items      = [];
+      $items      = [ ];
 
       foreach ($value as $item) {
         $items[] = $this->wrapInPresenter($item);
