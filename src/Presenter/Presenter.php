@@ -3,6 +3,7 @@
 use Deefour\Presenter\Contracts\Presentable;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use Exception;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use IteratorAggregate;
 use ReflectionProperty;
 
@@ -86,20 +87,6 @@ abstract class Presenter {
   }
 
   /**
-   * Derive the return value and wrap it in it's presenter if possible.
-   *
-   * @param  string $property
-   * @param  array  $args [optional]
-   *
-   * @return mixed
-   */
-  protected function derive($property, array $args = [ ]) {
-    $value = $this->deriveReturnValue($property, $args);
-
-    return $this->wrapInPresenter($value);
-  }
-
-  /**
    * Snake-to-camel-case string conversion.
    *
    * @link https://github.com/illuminate/support/blob/master/Str.php
@@ -142,7 +129,7 @@ abstract class Presenter {
    *
    * @return mixed
    */
-  protected function deriveReturnValue($property, array $args = [ ]) {
+  protected function derive($property, array $args = [ ]) {
     if (property_exists($this, $property) && (new ReflectionProperty($this, $property))->isPublic()) {
       return $this->$property;
     }
@@ -150,15 +137,15 @@ abstract class Presenter {
     $method = $this->deriveMethodName($property);
 
     if (method_exists($this, $method)) {
-      return call_user_func_array([ $this, $method ], $args);
+      return $this->decorate(call_user_func_array([ $this, $method ], $args));
     }
 
     if (isset($this->_model->$property)) {
-      return $this->_model->$property;
+      return $this->decorate($this->_model->$property);
     }
 
     if (method_exists($this->_model, $method)) {
-      return call_user_func_array([ $this->_model, $method ], $args);
+      return $this->decorate(call_user_func_array([ $this->_model, $method ], $args));
     }
 
     return null;
@@ -179,11 +166,12 @@ abstract class Presenter {
    * @param  mixed $value
    *
    * @return mixed
+   * @throws Exception
    */
-  protected function wrapInPresenter($value) {
+  protected function decorate($value) {
     // Laravel relation
-    if (is_a($value, 'Illuminate\Database\Eloquent\Relations\Relation')) {
-      return $this->wrapInPresenter($value->getResults());
+    if (is_a($value, Relation::class)) {
+      return $this->decorate($value->getResults());
     }
 
     if ( ! ($value instanceof IteratorAggregate) && ! ($value instanceof Presentable)) {
@@ -195,7 +183,7 @@ abstract class Presenter {
       $items      = [ ];
 
       foreach ($value as $item) {
-        $items[] = $this->wrapInPresenter($item);
+        $items[] = $this->decorate($item);
       }
 
       return new $collection($items);

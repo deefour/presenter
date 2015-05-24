@@ -24,6 +24,10 @@ class ArticlePresenterSpec extends ObjectBehavior {
     $this->_model->shouldBeAnInstanceOf(Article::class);
   }
 
+  function it_should_allow_method_access_to_underlying_model() {
+    $this->_model()->shouldBeAnInstanceOf(Article::class);
+  }
+
   function it_should_map_snake_case_property_to_camel_case_model_method() {
     $this->is_active->shouldBe(true);
 
