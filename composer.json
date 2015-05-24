@@ -1,6 +1,6 @@
 {
   "name": "deefour/presenter",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Presenters/Decorators for PHP Objects",
   "homepage": "https://github.com/deefour/presenter",
   "keywords": ["presenter", "deefour", "decorator", "view", "model", "laravel"],

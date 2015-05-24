@@ -11,7 +11,7 @@ Object-oriented presentation logic.
 Add Presenter to your `composer.json` file and run `composer update`. See [Packagist](https://packagist.org/packages/deefour/presenter) for specific versions.
 
 ```
-"deefour/presenter": "~0.4.0"
+"deefour/presenter": "~0.6.0"
 ```
 
 **`>=PHP5.5.0` is required.**
@@ -100,7 +100,7 @@ use Deefour\Presenter\Presenter;
 class ArticlePresenter extends Presenter {
 
   public function isDraft() {
-    return $this->model->isDraft() ? 'Yes' : 'No';
+    return $this->_model->isDraft() ? 'Yes' : 'No';
   }
 
 }
@@ -116,13 +116,13 @@ use Deefour\Presenter\Factory;
 
 $presenter = (new Factory)->make(new Article); //=> ArticlePolicy
 
-$presenter->model; //=> Article
+$presenter->_model; //=> Article
 
-$presenter->model->isDraft(); //=> false
+$presenter->_model->isDraft(); //=> false
 $presenter->isDraft(); //=> 'No'
 $presenter->is_draft; //=> 'No'
 
-$presenter->model()->published; //=> true
+$presenter->_model()->published; //=> true
 $presenter->published; //=> true
 ```
 
@@ -176,7 +176,7 @@ $presenter->tags->first(); //=> TagPresenter
 If you want access to the raw association, simply request it from the underlying object.
 
 ```php
-$presenter->model->tags()->first(); //=> Tag
+$presenter->_model->tags()->first(); //=> Tag
 ```
 
 ## Integration with Laravel
@@ -220,6 +220,14 @@ present($article)->is_draft; //=> 'No'
 - Source Code: https://github.com/deefour/presenter
 
 ## Changelog
+
+#### 0.6.0 - May 24, 2015
+
+ - Removed `model()` method on base presenter.
+ - Renamed `$model` property to `$_model` to avoid conflicts with an actual model
+ attribute with the name `'model'`.
+ - Presenters now only provide property access to **public** properties on the
+ presenter.
 
 #### 0.5.0 - April 27, 2015
 
