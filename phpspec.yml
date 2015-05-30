@@ -1,4 +1,4 @@
 suites:
   presenter_suite:
     namespace: Deefour\Presenter
-    psr4_prefix: Deefour
+    psr4_prefix: Deefour\Presenter
