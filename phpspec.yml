@@ -2,3 +2,4 @@ suites:
   presenter_suite:
     namespace: Deefour\Presenter
     psr4_prefix: Deefour\Presenter
+formatter.name: pretty
