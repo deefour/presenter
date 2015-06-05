@@ -1,4 +1,7 @@
-<?php namespace Deefour\Presenter\Exceptions;
+<?php
 
-class NotDefinedException extends \Exception {
+namespace Deefour\Presenter\Exceptions;
+
+class NotDefinedException extends \Exception
+{
 }

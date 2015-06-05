@@ -1,9 +1,10 @@
-<?php namespace Deefour\Presenter\Stubs;
+<?php
 
-class Category extends Model {
+namespace Deefour\Presenter\Stubs;
 
+class Category extends Model
+{
   protected $attributes = [
     'title' => 'Sports',
   ];
-
 }

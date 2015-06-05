@@ -1,9 +1,10 @@
-<?php namespace Deefour\Presenter\Stubs;
+<?php
+
+namespace Deefour\Presenter\Stubs;
 
 use Deefour\Presenter\ResolvesPresenters;
 
-class Tag {
-
+class Tag
+{
   use ResolvesPresenters;
-
 }

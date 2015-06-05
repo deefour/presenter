@@ -1,4 +1,7 @@
-<?php namespace Deefour\Presenter\Stubs;
+<?php
 
-class Event extends Model {
+namespace Deefour\Presenter\Stubs;
+
+class Event extends Model
+{
 }

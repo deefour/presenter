@@ -1,4 +1,7 @@
-<?php namespace Deefour\Presenter\Stubs;
+<?php
 
-class Author extends Model {
+namespace Deefour\Presenter\Stubs;
+
+class Author extends Model
+{
 }

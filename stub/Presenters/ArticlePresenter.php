@@ -1,11 +1,13 @@
-<?php namespace Deefour\Presenter\Stubs\Presenters;
+<?php
+
+namespace Deefour\Presenter\Stubs\Presenters;
 
 use Deefour\Presenter\Presenter;
 
-class ArticlePresenter extends Presenter {
-
-  public function title() {
-    return ucwords($this->_model->title);
+class ArticlePresenter extends Presenter
+{
+  public function title()
+  {
+      return ucwords($this->_model->title);
   }
-
 }
