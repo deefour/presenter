@@ -18,7 +18,7 @@ abstract class Presenter
      *
      * @var Presentable
      */
-     public $_model;
+    public $_model;
 
     /**
      * The presenter factory instance.
