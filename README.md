@@ -11,7 +11,7 @@ Object-oriented presentation logic.
 Add Presenter to your `composer.json` file and run `composer update`. See [Packagist](https://packagist.org/packages/deefour/presenter) for specific versions.
 
 ```
-"deefour/presenter": "~0.6.1"
+"deefour/presenter": "~0.6.2"
 ```
 
 **`>=PHP5.5.0` is required.**
@@ -220,6 +220,10 @@ present($article)->is_draft; //=> 'No'
 - Source Code: https://github.com/deefour/presenter
 
 ## Changelog
+
+#### 0.6.2 - June 5, 2015
+
+ - Now following PSR-2.
 
 #### 0.6.0 - May 24, 2015
 
