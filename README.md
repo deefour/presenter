@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/deefour/presenter.svg)](https://travis-ci.org/deefour/presenter)
 [![Packagist Version](http://img.shields.io/packagist/v/deefour/presenter.svg)](https://packagist.org/packages/deefour/presenter)
 [![Code Climate](https://codeclimate.com/github/deefour/presenter/badges/gpa.svg)](https://codeclimate.com/github/deefour/presenter)
+[![License](https://poser.pugx.org/deefour/presenter/license.svg)](https://packagist.org/packages/deefour/presenter)
 
 Object-oriented presentation logic.
 
