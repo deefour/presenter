@@ -49,16 +49,16 @@ Given an `Article` object
 ```php
 namespace App;
 
-class Article {
+class Article
+{
+    public $published = true;
 
-  public $published = true;
+    public $title = 'Governor Mike Taylor Runs for Second Term';
 
-  public $title = 'Governor Mike Taylor Runs for Second Term';
-
-  public function isDraft() {
-    return ! $this->published;
-  }
-
+    public function isDraft()
+    {
+        return ! $this->published;
+    }
 }
 ```
 
@@ -70,19 +70,19 @@ namespace App;
 use Deefour\Presenter\Contracts\Presentable;
 use Deefour\Presenter\ResolvesPresenters;
 
-class Article implements Presentable {
+class Article implements Presentable
+{
+    use ResolvesPresenters;
 
-  use ResolvesPresenters;
+    /**
+     * @inheritdoc
+     */
+    public function presenterNamespace()
+    {
+        return '\App\Presenters';
+    }
 
-  /**
-   * @inheritdoc
-   */
-  public function presenterNamespace() {
-    return '\App\Presenters';
-  }
-
-  // properties and methods here ...
-
+    // properties and methods here ...
 }
 ```
 
@@ -97,12 +97,12 @@ namespace App\Presenters;
 
 use Deefour\Presenter\Presenter;
 
-class ArticlePresenter extends Presenter {
-
-  public function isDraft() {
-    return $this->_model->isDraft() ? 'Yes' : 'No';
-  }
-
+class ArticlePresenter extends Presenter
+{
+    public function isDraft()
+    {
+        return $this->_model->isDraft() ? 'Yes' : 'No';
+    }
 }
 
 ```
@@ -141,22 +141,23 @@ namespace App;
 
 use Illuminate\Support\Collection;
 
-class Article {
+class Article
+{
+    public function category()
+    {
+        return new Category;
+    }
 
-  public function category() {
-    return new Category;
-  }
+    public function tags()
+    {
+        $collection = Collection;
 
-  public function tags() {
-    $collection = Collection;
+        $collection->push(new Tag);
+        $collection->push(new Tag);
+        $collection->push(new Tag);
 
-    $collection->push(new Tag);
-    $collection->push(new Tag);
-    $collection->push(new Tag);
-
-    return $collection;
-  }
-
+        return $collection;
+    }
 }
 ```
 
