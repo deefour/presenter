@@ -223,6 +223,10 @@ present($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 0.7.2 - August 4, 2015
+
+ - Abstracted presenter resolution out to new [`deefour/producer`](https://github.com/deefour/producer).
+
 #### 0.6.2 - June 5, 2015
 
  - Now following PSR-2.

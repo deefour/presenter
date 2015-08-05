@@ -3,18 +3,11 @@
 namespace Deefour\Presenter\Stubs;
 
 use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\ResolvesPresenters;
+use Deefour\Presenter\ProducesPresenters;
+use Deefour\Producer\ResolvesProducibles;
 use Illuminate\Support\Fluent;
 
 abstract class Model extends Fluent implements Presentable
 {
-  use ResolvesPresenters;
-
-  /**
-   * @inheritdoc
-   */
-  public function presenterNamespace()
-  {
-      return 'Deefour\\Presenter\\Stubs\\Presenters';
-  }
+  use ProducesPresenters, ResolvesProducibles;
 }

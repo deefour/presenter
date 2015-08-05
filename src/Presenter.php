@@ -2,14 +2,16 @@
 
 namespace Deefour\Presenter;
 
-use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\Exceptions\NotDefinedException;
 use Exception;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use IteratorAggregate;
 use ReflectionProperty;
+use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Presenter\Exceptions\NotDefinedException;
+use Deefour\Producer\Contracts\Producible;
+use Deefour\Producer\Factory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
-abstract class Presenter
+abstract class Presenter implements Producible
 {
     /**
      * The raw model object being decorated by the presenter.
@@ -21,7 +23,7 @@ abstract class Presenter
     public $_model;
 
     /**
-     * The presenter factory instance.
+     * The resolution factory instance.
      *
      * @var Factory
      */
@@ -200,16 +202,12 @@ abstract class Presenter
             return new $collection($items);
         }
 
-        try {
-            $presenter = $this->_factory->makeOrFail($value);
+        $presenter = $this->_factory->make($value, 'presenter');
 
-            return new $presenter($value);
-        } catch (Exception $e) {
-            if ($e instanceof NotDefinedException) {
-                return $value;
-            }
-
-            throw $e;  // re-throw, something unexpected went wrong
+        if (is_null($presenter) || !($presenter instanceof Presenter)) {
+          return $value;
         }
+
+        return new $presenter($value);
     }
 }

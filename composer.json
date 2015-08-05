@@ -6,7 +6,8 @@
   "license": "MIT",
   "require": {
     "php": ">=5.5.0",
-    "illuminate/support": "^5.0"
+    "illuminate/support": "^5.0",
+    "deefour/producer": "^0.1.0"
   },
   "require-dev": {
     "phpspec/phpspec": "^2.2.0",

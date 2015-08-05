@@ -2,7 +2,7 @@
 
 namespace spec\Deefour\Presenter\Stubs;
 
-use Deefour\Presenter\Exceptions\NotDefinedException;
+use Deefour\Producer\Exceptions\NotProducibleException;
 use Deefour\Presenter\Stubs\Author;
 use PhpSpec\ObjectBehavior;
 
@@ -15,6 +15,6 @@ class AuthorSpec extends ObjectBehavior
 
     public function it_throws_exception_for_unresolvable_presenter()
     {
-        $this->shouldThrow(NotDefinedException::class)->during('presenter');
+        $this->shouldThrow(NotProducibleException::class)->during('presenter');
     }
 }

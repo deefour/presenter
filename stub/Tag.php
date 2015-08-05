@@ -2,9 +2,10 @@
 
 namespace Deefour\Presenter\Stubs;
 
-use Deefour\Presenter\ResolvesPresenters;
+use Deefour\Presenter\ProducesPresenters;
+use Deefour\Producer\Contracts\Producer;
 
-class Tag
+class Tag implements Producer
 {
-  use ResolvesPresenters;
+  use ProducesPresenters;
 }
