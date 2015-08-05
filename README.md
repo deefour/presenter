@@ -9,10 +9,10 @@ Object-oriented presentation logic.
 
 ## Getting Started
 
-Add Presenter to your `composer.json` file and run `composer update`. See [Packagist](https://packagist.org/packages/deefour/presenter) for specific versions.
+Run the following to add Presenter to your project's `composer.json`. See [Packagist](https://packagist.org/packages/deefour/presenter) for specific versions.
 
-```
-"deefour/presenter": "~0.6.2"
+```bash
+composer require deefour/presenter
 ```
 
 **`>=PHP5.5.0` is required.**
@@ -226,6 +226,7 @@ present($article)->is_draft; //=> 'No'
 #### 0.7.2 - August 4, 2015
 
  - Abstracted presenter resolution out to new [`deefour/producer`](https://github.com/deefour/producer).
+ - Removed the Laravel service provider and facade. The `'producer'` service in `deefour/producer` should be used instead.
 
 #### 0.6.2 - June 5, 2015
 
