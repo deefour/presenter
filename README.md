@@ -17,28 +17,28 @@ composer require deefour/presenter
 
 **`>=PHP5.5.0` is required.**
 
-## The Presenter Factory
+## The Producer Factory
 
-A factory is available at `Deefour\Presenter\Factory` to instantiate presenters based on objects passed on.
+Presenter uses the class factory in [`deefour/producer`](https://github.com/deefour/producer) to generate presenter instances.
 
 ### Class Resolution
 
-The `resolve()` method will generate a FQCN for the passed object. No check is performed here to ensure a class actually exists with the returned name.
+The `resolve()` method will generate a FQCN of the presenter for the passed object. No check is performed here to ensure a class actually exists with the returned name, or if it is in fact a presenter.
 
 ```php
-use Deefour\Presenter\Factory;
+use Deefour\Producer\Factory;
 
-(new Factory)->resolve(new Article); //=> "ArticlePresenter"
+(new Factory)->resolve(new Article, 'presenter'); //=> "ArticlePresenter"
 ```
 
 ### Presenter Instantiation
 
-The `make()` method will attempt to instantiate the resolved FQCN for the passed object. If no matching presenter class exists, `null` will be returned.
+The `make()` method will attempt to instantiate the resolved FQCN for the passed object. If no matching presenter exists, `null` will be returned.
 
 ```php
-use Deefour\Presenter\Factory;
+use Deefour\Producer\Factory;
 
-(new Factory)->make(new Article); //=> ArticlePresenter
+(new Factory)->make(new Article, 'presenter'); //=> "ArticlePresenter"
 ```
 
 > **Note:** There is a similar `makeOrFail()` method that will throw an exception if the presenter class does not exist.
@@ -63,35 +63,44 @@ class Article
 }
 ```
 
-The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\ResolvesPresenters` trait is available to satisfy the interface with sensible defaults.
+The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\ProducesPresenters` trait is available to satisfy the interface and provide some additional helpers.
 
 ```php
 namespace App;
 
 use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\ResolvesPresenters;
+use Deefour\Presenter\ProducesPresenters;
 
 class Article implements Presentable
 {
-    use ResolvesPresenters;
+    use ProducesPresenters;
 
-    /**
-     * @inheritdoc
-     */
-    public function presenterNamespace()
-    {
-        return '\App\Presenters';
-    }
-
-    // properties and methods here ...
+    // ...
 }
 ```
 
-> **Note:** The `presenterNamespace()` method tells the factory where to look for the `ArticlePolicy`, pointing it at `App\Presenters\ArticlePolicy` instead of the default `ArticlePolicy`.
+By default, the factory will resolve `'App\ArticlePresenter'`. A `resolve` method can be added to the class to provide custom logic.
+
+```php
+namespace App;
+
+use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Presenter\ProducesPresenters;
+
+class Article implements Presentable
+{
+    use ProducesPresenters;
+
+    public function resolve($what)
+    {
+        return $this->published ? 'App\\PublishedArticlePresenter' : 'App\\ArticlePresenter';
+    }
+}
+```
 
 ## Presenters
 
-As for the `ArticlePresenter`, a bare implementation could be
+As for the `ArticlePresenter` itself, a bare implementation could be
 
 ```php
 namespace App\Presenters;
@@ -113,9 +122,9 @@ class ArticlePresenter extends Presenter
 A quick overview of the API available.
 
 ```php
-use Deefour\Presenter\Factory;
+use Deefour\Producer\Factory;
 
-$presenter = (new Factory)->make(new Article); //=> ArticlePolicy
+$presenter = (new Factory)->make(new Article, 'presenter'); //=> ArticlePolicy
 
 $presenter->_model; //=> Article
 
@@ -167,7 +176,7 @@ Given the existence of `ArticlePresenter`, `CategoryPresenter`, and `TagPresente
 ```php
 use Deefour\Presenter\Factory;
 
-$presenter = (new Factory)->make(new Article); //=> ArticlePolicy
+$presenter = (new Factory)->make(new Article, 'presenter'); //=> ArticlePresenter
 
 $presenter->category; //=> CategoryPresenter
 $presenter->tags->first(); //=> TagPresenter
@@ -181,23 +190,9 @@ If you want access to the raw association, simply request it from the underlying
 $presenter->_model->tags()->first(); //=> Tag
 ```
 
-## Integration with Laravel
-
-Presenter comes with a service provider for the `Deefour\Presenter\Factory` presenter factory. In Laravel's `config/app.php` file, add the `PresenterServiceProvider` to the list of providers.
-
-```php
-'providers' => [
-
-  // ...
-
-  'Deefour\Presenter\Providers\PresenterServiceProvider',
-
-],
-```
-
 ### Helper Methods
 
-A global `present()` function can be made globally available by including the `helpers.php` file in your project's `composer.json`. Presenter doesn't autoload this file, giving you the choice whether or not to 'pollute' the global environment with this function.
+A global `present()` function can be made available by including the `helpers.php` file in your project's `composer.json`. Presenter doesn't autoload this file, giving you the choice whether or not to 'pollute' the global environment with this function.
 
 ```php
 "autoload": {
