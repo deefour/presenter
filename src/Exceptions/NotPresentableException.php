@@ -2,9 +2,10 @@
 
 namespace Deefour\Presenter\Exceptions;
 
+use Deefour\Producer\Exceptions\NotProducibleException;
 use Deefour\Presenter\Contracts\Presentable;
 
-class NotPresentableException extends \Exception
+class NotPresentableException extends NotProducibleException
 {
     /**
      * The object to wrap in a presenter.
@@ -34,7 +35,9 @@ class NotPresentableException extends \Exception
     }
 
     /**
-     * {@inheritdoc}
+     * Format a message for the exception.
+     *
+     * @return string
      */
     protected function message() {
         return sprintf(

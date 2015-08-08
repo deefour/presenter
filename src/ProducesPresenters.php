@@ -12,12 +12,12 @@ trait ProducesPresenters
     /**
      * @inheritdoc
      */
-    public function presenter($with = 'presenter')
+    public function presenter($presenter = null)
     {
-        if ($with !== 'presenter' && !is_a($with, Presenter::class, true)) {
-            throw new NotPresentableException($this, $with);
+        if (is_null($presenter) || is_a($presenter, Presenter::class, true)) {
+            return $this->produce($presenter ?: 'presenter');
         }
 
-        return $this->produce($with);
+        throw new NotPresentableException($this, $presenter);
     }
 }

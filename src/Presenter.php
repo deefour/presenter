@@ -8,7 +8,7 @@ use ReflectionProperty;
 use Deefour\Presenter\Contracts\Presentable;
 use Deefour\Presenter\Exceptions\NotDefinedException;
 use Deefour\Producer\Contracts\Producible;
-use Deefour\Producer\Factory;
+use Deefour\Producer\Factory as ProductionFactory;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 abstract class Presenter implements Producible
@@ -25,7 +25,7 @@ abstract class Presenter implements Producible
     /**
      * The resolution factory instance.
      *
-     * @var Factory
+     * @var ProductionFactory
      */
     protected $_factory;
 
@@ -44,7 +44,7 @@ abstract class Presenter implements Producible
     public function __construct(Presentable $model)
     {
         $this->_model   = $model;
-        $this->_factory = new Factory();
+        $this->_factory = new ProductionFactory();
     }
 
     /**

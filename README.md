@@ -17,31 +17,18 @@ composer require deefour/presenter
 
 **`>=PHP5.5.0` is required.**
 
-## The Producer Factory
+## The Presenter Factory
 
-Presenter uses the class factory in [`deefour/producer`](https://github.com/deefour/producer) to generate presenter instances.
-
-### Class Resolution
-
-The `resolve()` method will generate a FQCN of the presenter for the passed object. No check is performed here to ensure a class actually exists with the returned name, or if it is in fact a presenter.
+A factory class is available to resolve the FQCN for or instantiate an instance of a presenter class associated with the passed presentable object.
 
 ```php
-use Deefour\Producer\Factory;
+use Deefour\Presenter\Factory;
 
-(new Factory)->resolve(new Article, 'presenter'); //=> "ArticlePresenter"
+(new Factory)->resolve(new Article);          //=> 'ArticlePresenter'
+(new Factory)->make(new Article);             //=> 'ArticlePresenter'
+(new Factory)->makeOrFail(new Article);       //=> 'ArticlePresenter'
+(new Factory)->makeOrFail(new InvalidObject); //=> throws 'NotPresentableException'
 ```
-
-### Presenter Instantiation
-
-The `make()` method will attempt to instantiate the resolved FQCN for the passed object. If no matching presenter exists, `null` will be returned.
-
-```php
-use Deefour\Producer\Factory;
-
-(new Factory)->make(new Article, 'presenter'); //=> "ArticlePresenter"
-```
-
-> **Note:** There is a similar `makeOrFail()` method that will throw an exception if the presenter class does not exist.
 
 #### Preparing Models for Presentation
 
@@ -63,7 +50,7 @@ class Article
 }
 ```
 
-The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\ProducesPresenters` trait is available to satisfy the interface and provide some additional helpers.
+The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\ProducesPresenters` trait is available to satisfy the interface.
 
 ```php
 namespace App;
@@ -91,12 +78,14 @@ class Article implements Presentable
 {
     use ProducesPresenters;
 
-    public function resolve($what)
+    public function resolve()
     {
         return $this->published ? 'App\\PublishedArticlePresenter' : 'App\\ArticlePresenter';
     }
 }
 ```
+
+**Note:** When using this package with [`deefour/authorizer`](https://github.com/deefour/authorizer) or [`deefour/producer`](https://github.com/deefour/producer), care must be taken when overriding the `resolve()` method to account for policies, scopes, and other classes that may be resolved through the production factory in `deefour/producer`.
 
 ## Presenters
 
@@ -217,6 +206,11 @@ present($article)->is_draft; //=> 'No'
 - Source Code: https://github.com/deefour/presenter
 
 ## Changelog
+
+#### 0.7.3 - August 8, 2015
+
+ - Compat changes for updates to [`deefour/producer`](https://github.com/deefour/producer).
+ - New `Factory` class is available to prevent the need to interact directly with the factory in `deefour/producer`.
 
 #### 0.7.2 - August 4, 2015
 
