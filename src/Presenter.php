@@ -70,7 +70,7 @@ abstract class Presenter implements Producible
      *
      * @return mixed
      */
-    public function __call($method, array $args)
+    public function __call($method, $args)
     {
         return $this->_derive($method, $args);
     }
