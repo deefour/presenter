@@ -207,13 +207,10 @@ present($article)->is_draft; //=> 'No'
 
 ## Changelog
 
-#### 0.7.3 - August 8, 2015
+#### 0.8.0 - August 8, 2015
 
  - Compat changes for updates to [`deefour/producer`](https://github.com/deefour/producer).
  - New `Factory` class is available to prevent the need to interact directly with the factory in `deefour/producer`.
-
-#### 0.7.2 - August 4, 2015
-
  - Abstracted presenter resolution out to new [`deefour/producer`](https://github.com/deefour/producer).
  - Removed the Laravel service provider and facade. The `'producer'` service in `deefour/producer` should be used instead.
 
