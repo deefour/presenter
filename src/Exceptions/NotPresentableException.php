@@ -31,7 +31,7 @@ class NotPresentableException extends NotProducibleException
         $this->presentable = $presentable;
         $this->presenter   = $presenter;
 
-        parent::__construct($this->message());
+        parent::__construct($presentable, $presenter, $this->message());
     }
 
     /**
