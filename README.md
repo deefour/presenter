@@ -189,7 +189,8 @@ A global `present()` function can be made available by including the `helpers.ph
     ...
   },
   "files": [
-    "vendor/deefour/presenter/src/Presenter/helpers.php"
+    "vendor/deefour/producer/src/helpers.php",
+    "vendor/deefour/presenter/src/helpers.php"
   ]
 }
 ```
