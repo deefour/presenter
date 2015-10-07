@@ -208,6 +208,10 @@ present($article)->is_draft; //=> 'No'
 
 ## Changelog
 
+#### 1.0.0 - October 7, 2015
+
+ - Release 1.0.0.
+
 #### 0.8.0 - August 8, 2015
 
  - Compat changes for updates to [`deefour/producer`](https://github.com/deefour/producer).
