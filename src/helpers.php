@@ -1,6 +1,6 @@
 <?php
 
-use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Presenter\Presenter;
 use Deefour\Presenter\Exceptions\NotPresentableException;
 
 if (!function_exists('present')) {
@@ -14,7 +14,7 @@ if (!function_exists('present')) {
      */
     function present($object, $with = 'presenter')
     {
-        if ($with !== 'presenter' && !($with instanceof Presentable)) {
+        if ($with !== 'presenter' && !is_a($with, Presenter::class, true)) {
           throw new NotPresentableException($object, $with);
         }
 
