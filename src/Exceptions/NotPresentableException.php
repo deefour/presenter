@@ -27,7 +27,8 @@ class NotPresentableException extends NotProducibleException
      * @param Presentable $presentable
      * @param string $presenter
      */
-    public function __construct(Presentable $presentable, $presenter) {
+    public function __construct(Presentable $presentable, $presenter)
+    {
         $this->presentable = $presentable;
         $this->presenter   = $presenter;
 
@@ -39,7 +40,8 @@ class NotPresentableException extends NotProducibleException
      *
      * @return string
      */
-    protected function message() {
+    protected function message()
+    {
         return sprintf(
             'The [%s] object does not implement [%s]. It cannot be used to ' .
             'decorate [%s]',

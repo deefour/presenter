@@ -13,10 +13,10 @@ use PhpSpec\ObjectBehavior;
 
 class ArticlePresenterSpec extends ObjectBehavior
 {
-  public function let()
-  {
-      $this->beConstructedWith(new Article());
-  }
+    public function let()
+    {
+        $this->beConstructedWith(new Article());
+    }
 
     public function it_is_initializable()
     {

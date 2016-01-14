@@ -9,5 +9,5 @@ use Illuminate\Support\Fluent;
 
 abstract class Model extends Fluent implements Presentable
 {
-  use ProducesPresenters, ResolvesProducibles;
+    use ProducesPresenters, ResolvesProducibles;
 }

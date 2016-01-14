@@ -205,7 +205,7 @@ abstract class Presenter implements Producible
         $presenter = $this->_factory->make($value, 'presenter');
 
         if (is_null($presenter) || !($presenter instanceof Presenter)) {
-          return $value;
+            return $value;
         }
 
         return new $presenter($value);

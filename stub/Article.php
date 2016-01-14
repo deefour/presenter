@@ -6,12 +6,12 @@ use Illuminate\Support\Collection;
 
 class Article extends Model
 {
-  protected $attributes = [
-    'title'          => 'sample article',
-    'active'         => true,
-    'zip_code'       => '06483',
-    'street_address' => '1 Maple Ave',
-  ];
+    protected $attributes = [
+        'title'          => 'sample article',
+        'active'         => true,
+        'zip_code'       => '06483',
+        'street_address' => '1 Maple Ave',
+    ];
 
     public function isActive()
     {

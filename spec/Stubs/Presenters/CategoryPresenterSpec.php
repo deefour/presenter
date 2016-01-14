@@ -8,10 +8,10 @@ use PhpSpec\ObjectBehavior;
 
 class CategoryPresenterSpec extends ObjectBehavior
 {
-  public function let()
-  {
-      $this->beConstructedWith(new Category());
-  }
+    public function let()
+    {
+        $this->beConstructedWith(new Category());
+    }
 
     public function it_is_initializable()
     {

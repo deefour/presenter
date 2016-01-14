@@ -9,10 +9,10 @@ use PhpSpec\ObjectBehavior;
 
 class ArticleSpec extends ObjectBehavior
 {
-  public function it_is_initializable()
-  {
-      $this->shouldHaveType(Article::class);
-  }
+    public function it_is_initializable()
+    {
+        $this->shouldHaveType(Article::class);
+    }
 
     public function it_should_resolve_presenter()
     {

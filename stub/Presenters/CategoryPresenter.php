@@ -6,7 +6,7 @@ use Deefour\Presenter\Presenter;
 
 class CategoryPresenter extends Presenter
 {
-  protected $unavailable = true;
+    protected $unavailable = true;
 
     public $available = true;
 }
