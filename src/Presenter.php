@@ -187,7 +187,7 @@ abstract class Presenter implements Producible
             return $this->decorate($value->getResults());
         }
 
-        if (!($value instanceof IteratorAggregate) && !($value instanceof Presentable)) {
+        if ( ! ($value instanceof IteratorAggregate) && !($value instanceof Presentable)) {
             return $value;
         }
 
@@ -204,8 +204,8 @@ abstract class Presenter implements Producible
 
         $presenter = $this->_factory->make($value, 'presenter');
 
-        if (is_null($presenter) || !($presenter instanceof Presenter)) {
-            return $value;
+        if (is_null($presenter) || ! ($presenter instanceof Presenter)) {
+          return $value;
         }
 
         return new $presenter($value);

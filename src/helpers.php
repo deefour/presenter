@@ -3,7 +3,7 @@
 use Deefour\Presenter\Presenter;
 use Deefour\Presenter\Exceptions\NotPresentableException;
 
-if (!function_exists('present')) {
+if ( ! function_exists('present')) {
     /**
      * Instantiate and return a presenter wrapping the passed object.
      *
