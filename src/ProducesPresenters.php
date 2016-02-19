@@ -18,6 +18,6 @@ trait ProducesPresenters
             return $this->produce($presenter ?: 'presenter');
         }
 
-        throw new NotPresentableException($this, $presenter);
+        throw new NotPresentableException($this);
     }
 }

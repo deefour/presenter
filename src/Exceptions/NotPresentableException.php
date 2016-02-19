@@ -12,14 +12,7 @@ class NotPresentableException extends NotProducibleException
      *
      * @var Presentable
      */
-    protected $presentable;
-
-    /**
-     * The presenter FQCN.
-     *
-     * @var string
-     */
-    protected $presenter;
+    public $presentable;
 
     /**
      * Constructor.
@@ -27,12 +20,9 @@ class NotPresentableException extends NotProducibleException
      * @param Presentable $presentable
      * @param string $presenter
      */
-    public function __construct(Presentable $presentable, $presenter)
+    public function __construct(Presentable $presentable) 
     {
         $this->presentable = $presentable;
-        $this->presenter   = $presenter;
-
-        parent::__construct($presentable, $presenter, $this->message());
     }
 
     /**
@@ -40,14 +30,12 @@ class NotPresentableException extends NotProducibleException
      *
      * @return string
      */
-    protected function message()
+    protected function getMessage() 
     {
         return sprintf(
-            'The [%s] object does not implement [%s]. It cannot be used to ' .
-            'decorate [%s]',
-            $this->presenter,
+            'The [%s] object does not implement [%s].',
+            get_class($this->presentable),
             Presentable::class,
-            get_class($this->presentable)
         );
     }
 }
