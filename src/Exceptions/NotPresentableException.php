@@ -20,7 +20,7 @@ class NotPresentableException extends NotProducibleException
      * @param Presentable $presentable
      * @param string $presenter
      */
-    public function __construct(Presentable $presentable) 
+    public function __construct(Presentable $presentable)
     {
         $this->presentable = $presentable;
     }
@@ -30,12 +30,12 @@ class NotPresentableException extends NotProducibleException
      *
      * @return string
      */
-    protected function getMessage() 
+    protected function getMessage()
     {
         return sprintf(
             'The [%s] object does not implement [%s].',
             get_class($this->presentable),
-            Presentable::class,
+            Presentable::class
         );
     }
 }
