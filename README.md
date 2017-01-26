@@ -1,9 +1,9 @@
 # Presenter
 
-[![Build Status](https://travis-ci.org/deefour/presenter.svg)](https://travis-ci.org/deefour/presenter)
-[![Packagist Version](http://img.shields.io/packagist/v/deefour/presenter.svg)](https://packagist.org/packages/deefour/presenter)
-[![Code Climate](https://codeclimate.com/github/deefour/presenter/badges/gpa.svg)](https://codeclimate.com/github/deefour/presenter)
-[![License](https://poser.pugx.org/deefour/presenter/license)](https://packagist.org/packages/deefour/presenter)
+<a href="https://travis-ci.org/deefour/presenter"><img src="https://travis-ci.org/deefour/presenter.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/deefour/presenter"><img src="https://poser.pugx.org/deefour/presenter/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/deefour/presenter"><img src="https://poser.pugx.org/deefour/presenter/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/deefour/presenter"><img src="https://poser.pugx.org/deefour/presenter/license.svg" alt="License"></a>
 
 Object-oriented presentation logic.
 
