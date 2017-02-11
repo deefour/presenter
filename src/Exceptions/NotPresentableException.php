@@ -2,8 +2,8 @@
 
 namespace Deefour\Presenter\Exceptions;
 
-use Deefour\Producer\Exceptions\NotProducibleException;
 use Deefour\Presenter\Contracts\Presentable;
+use Deefour\Producer\Exceptions\NotProducibleException;
 
 class NotPresentableException extends NotProducibleException
 {
@@ -18,7 +18,7 @@ class NotPresentableException extends NotProducibleException
      * Constructor.
      *
      * @param Presentable $presentable
-     * @param string $presenter
+     * @param string      $presenter
      */
     public function __construct(Presentable $presentable)
     {

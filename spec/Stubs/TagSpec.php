@@ -2,8 +2,8 @@
 
 namespace spec\Deefour\Presenter\Stubs;
 
-use Deefour\Producer\Exceptions\NotProducibleException;
 use Deefour\Presenter\Stubs\Tag;
+use Deefour\Producer\Exceptions\NotProducibleException;
 use PhpSpec\ObjectBehavior;
 
 class TagSpec extends ObjectBehavior

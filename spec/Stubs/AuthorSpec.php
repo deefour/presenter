@@ -2,8 +2,8 @@
 
 namespace spec\Deefour\Presenter\Stubs;
 
-use Deefour\Producer\Exceptions\NotProducibleException;
 use Deefour\Presenter\Stubs\Author;
+use Deefour\Producer\Exceptions\NotProducibleException;
 use PhpSpec\ObjectBehavior;
 
 class AuthorSpec extends ObjectBehavior

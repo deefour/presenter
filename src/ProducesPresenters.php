@@ -7,7 +7,7 @@ use Deefour\Presenter\Exceptions\NotPresentableException;
 trait ProducesPresenters
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function presenter($presenter = null)
     {

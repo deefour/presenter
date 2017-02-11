@@ -2,14 +2,12 @@
 
 namespace spec\Deefour\Presenter;
 
-
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
-use Deefour\Presenter\Stubs\Tag;
-use Deefour\Presenter\Stubs\Podcast;
 use Deefour\Presenter\Stubs\Article;
+use Deefour\Presenter\Stubs\Podcast;
 use Deefour\Presenter\Stubs\Presenters\ArticlePresenter;
+use Deefour\Presenter\Stubs\Tag;
 use Deefour\Producer\Exceptions\NotProducibleException;
+use PhpSpec\ObjectBehavior;
 
 class FactorySpec extends ObjectBehavior
 {
@@ -35,6 +33,6 @@ class FactorySpec extends ObjectBehavior
 
     public function it_should_throw_exception_on_make_or_fail()
     {
-      $this->shouldThrow(NotProducibleException::class)->duringMakeOrFail(new Podcast);
+        $this->shouldThrow(NotProducibleException::class)->duringMakeOrFail(new Podcast);
     }
 }

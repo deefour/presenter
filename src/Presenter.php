@@ -2,14 +2,13 @@
 
 namespace Deefour\Presenter;
 
-use Exception;
-use IteratorAggregate;
-use ReflectionProperty;
 use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\Exceptions\NotDefinedException;
 use Deefour\Producer\Contracts\Producible;
 use Deefour\Producer\Factory as ProductionFactory;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use IteratorAggregate;
+use ReflectionProperty;
 
 abstract class Presenter implements Producible
 {
@@ -187,7 +186,7 @@ abstract class Presenter implements Producible
             return $this->decorate($value->getResults());
         }
 
-        if ( ! ($value instanceof IteratorAggregate) && !($value instanceof Presentable)) {
+        if ( ! ($value instanceof IteratorAggregate) && ! ($value instanceof Presentable)) {
             return $value;
         }
 
@@ -204,8 +203,8 @@ abstract class Presenter implements Producible
 
         $presenter = $this->_factory->make($value, 'presenter');
 
-        if (is_null($presenter) || ! ($presenter instanceof Presenter)) {
-          return $value;
+        if (is_null($presenter) || ! ($presenter instanceof self)) {
+            return $value;
         }
 
         return new $presenter($value);
