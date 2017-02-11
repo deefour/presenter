@@ -8,7 +8,7 @@ if ( ! function_exists('present')) {
      * Instantiate and return a presenter wrapping the passed object.
      *
      * @param Presentable|mixed $object
-     * @param string            $presenter [optional]
+     * @param string            $presenter
      *
      * @return Presenter
      */

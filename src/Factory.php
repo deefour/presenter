@@ -19,7 +19,7 @@ class Factory
     /**
      * Constructor.
      *
-     * @param ProductionFactory $productionFactory [optional]
+     * @param ProductionFactory $productionFactory
      */
     public function __construct(ProductionFactoryContract $productionFactory = null)
     {

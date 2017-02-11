@@ -134,7 +134,7 @@ abstract class Presenter implements Producible
      * This will fail loudly if the property/method could not be derived.
      *
      * @param string $property
-     * @param array  $args     [optional]
+     * @param array  $args
      *
      * @return mixed
      */
