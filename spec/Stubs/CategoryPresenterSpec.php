@@ -1,16 +1,16 @@
 <?php
 
-namespace spec\Deefour\Presenter\Stubs\Presenters;
+namespace spec\Deefour\Presenter\Stubs;
 
 use Deefour\Presenter\Stubs\Category;
-use Deefour\Presenter\Stubs\Presenters\CategoryPresenter;
+use Deefour\Presenter\Stubs\CategoryPresenter;
 use PhpSpec\ObjectBehavior;
 
 class CategoryPresenterSpec extends ObjectBehavior
 {
     public function let()
     {
-        $this->beConstructedWith(new Category());
+        $this->beConstructedWith(new Category);
     }
 
     public function it_is_initializable()

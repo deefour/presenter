@@ -1,13 +1,13 @@
 <?php
 
-namespace spec\Deefour\Presenter\Stubs\Presenters;
+namespace spec\Deefour\Presenter\Stubs;
 
 use Deefour\Presenter\Stubs\Article;
 use Deefour\Presenter\Stubs\Author;
 use Deefour\Presenter\Stubs\Category;
-use Deefour\Presenter\Stubs\Presenters\ArticlePresenter;
-use Deefour\Presenter\Stubs\Presenters\CategoryPresenter;
-use Deefour\Presenter\Stubs\Presenters\EventPresenter;
+use Deefour\Presenter\Stubs\ArticlePresenter;
+use Deefour\Presenter\Stubs\CategoryPresenter;
+use Deefour\Presenter\Stubs\EventPresenter;
 use Illuminate\Support\Collection;
 use PhpSpec\ObjectBehavior;
 
@@ -15,7 +15,7 @@ class ArticlePresenterSpec extends ObjectBehavior
 {
     public function let()
     {
-        $this->beConstructedWith(new Article());
+        $this->beConstructedWith(new Article);
     }
 
     public function it_is_initializable()

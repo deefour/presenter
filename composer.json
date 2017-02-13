@@ -6,8 +6,7 @@
   "license": "MIT",
   "require": {
     "php": ">=5.5.0",
-    "illuminate/support": "^5.0",
-    "deefour/producer": "^1.1.1"
+    "illuminate/support": "^5.0"
   },
   "require-dev": {
     "phpspec/phpspec": "^2.4.0",
@@ -30,9 +29,6 @@
   "autoload-dev": {
     "psr-4": {
       "Deefour\\Presenter\\Stubs\\": "stub/"
-    },
-    "files": [
-      "src/helpers.php"
-    ]
+    }
   }
 }

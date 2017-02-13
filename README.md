@@ -17,26 +17,18 @@ composer require deefour/presenter
 
 **`>=PHP5.5.0` is required.**
 
-## The Presenter Factory
-
-A factory class is available to resolve the FQCN for or instantiate an instance of a presenter class associated with the passed presentable object.
+A factory class is available to resolve the FQCN of a presenter class associated with the passed object.
 
 ```php
-use Deefour\Presenter\Factory;
+use Deefour\Presenter\Resolver;
 
-(new Factory)->resolve(new Article);          //=> 'ArticlePresenter'
-(new Factory)->make(new Article);             //=> 'ArticlePresenter'
-(new Factory)->makeOrFail(new Article);       //=> 'ArticlePresenter'
-(new Factory)->makeOrFail(new InvalidObject); //=> throws 'NotPresentableException'
+(new Resolver)->presenter(new Article);       //=> 'ArticlePresenter'
+(new Resolver)->presenterOrFail(new Article); //=> 'ArticlePresenter'
 ```
-
-#### Preparing Models for Presentation
 
 Given an `Article` object
 
 ```php
-namespace App;
-
 class Article
 {
     public $published = true;
@@ -50,50 +42,74 @@ class Article
 }
 ```
 
-The factory is unwilling to attempt presenter instantiaion for classes that do not implement `Deefour\Presenter\Contracts\Presentable`. A `Deefour\Presenter\ProducesPresenters` trait is available to satisfy the interface.
+the resolver will simply append `'Presenter'` to the `Article` FQN, looking for an `ArticlePresenter` class.
+
+A static `modelName` method can be implemented on the object to inform the resolver which class to use as a base for resolution.
 
 ```php
-namespace App;
-
-use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\ProducesPresenters;
-
-class Article implements Presentable
+class Article
 {
-    use ProducesPresenters;
+    static public function modelClass()
+    {
+      return Post;
+    }
 
     // ...
 }
 ```
 
-By default, the factory will resolve `'App\ArticlePresenter'`. A `resolve` method can be added to the class to provide custom logic.
+```php
+use Deefour\Presenter\Resolver;
+
+(new Resolver)->presenter(new Article); //=> 'PostPresenter'
+```
+
+A static `presenterMethod` can be implemented on the object to inform the resolver the exact FQN to use for presentation
 
 ```php
-namespace App;
-
-use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Presenter\ProducesPresenters;
-
-class Article implements Presentable
+class Article
 {
-    use ProducesPresenters;
-
-    public function resolve()
+    static public function presenterClass()
     {
-        return $this->published ? 'App\\PublishedArticlePresenter' : 'App\\ArticlePresenter';
+      return BlogPresenter::class;
     }
+
+    // ...
 }
 ```
 
-**Note:** When using this package with [`deefour/authorizer`](https://github.com/deefour/authorizer) or [`deefour/producer`](https://github.com/deefour/producer), care must be taken when overriding the `resolve()` method to account for policies, scopes, and other classes that may be resolved through the production factory in `deefour/producer`.
+```php
+use Deefour\Presenter\Resolver;
+
+(new Resolver)->presenter(new Article); //=> 'BlogPresenter'
+```
+
+If the resulting FQN from the resolver does not match an existing, valid class name, `null` will be returned or a `NotDefinedException` will be thrown.
+
+```php
+class Article
+{
+    static public function presenterClass()
+    {
+      return 'NonExistenterPresenter';
+    }
+
+    // ...
+}
+```
+
+```php
+use Deefour\Presenter\Resolver;
+
+(new Resolver)->presenter(new Article); //=> null
+(new Resolver)->presenterOrFail(new Article); //=> throws NotDefinedException
+```
 
 ## Presenters
 
-As for the `ArticlePresenter` itself, a bare implementation could be
+The presenters themselves must extend `Deefour\Presenter\Presenter`.
 
 ```php
-namespace App\Presenters;
-
 use Deefour\Presenter\Presenter;
 
 class ArticlePresenter extends Presenter
@@ -127,13 +143,13 @@ $presenter->published; //=> true
 
 A few things to notice:
 
- - The underlying object decorated by the presenter can be accessed via the `$model` property or `model()` method.
+ - The underlying object decorated by the presenter can be accessed via the `$_model` property or `model()` method.
  - Any property or method publicly accessible on the underlying object can also be accessed directly through the presenter.
  - Any publicly accessible, camel-cased method on the presenter or underlying model can be accessed via snake-cased property access.
 
 ### Automatic Presenter Resolution
 
-If a property or method is resolved through the `__get()` or `__call()` methods on the presenter, an attempt will be made to resolve and wrap the return value in a related presenter.
+When a property or method is resolved through the `__get()` or `__call()` methods on the presenter, an attempt will be made to resolve and wrap the return value in a presenter too.
 
 ```php
 namespace App;
@@ -163,12 +179,12 @@ class Article
 Given the existence of `ArticlePresenter`, `CategoryPresenter`, and `TagPresenter`, the following will be returned
 
 ```php
-use Deefour\Presenter\Factory;
+use Deefour\Presenter\Resolver;
 
-$presenter = (new Factory)->make(new Article, 'presenter'); //=> ArticlePresenter
+$presenter = (new Resolver)->presenter(new Article); //=> ArticlePresenter
 
-$presenter->category; //=> CategoryPresenter
-$presenter->tags->first(); //=> TagPresenter
+(new $presenter)->category;      //=> CategoryPresenter
+(new $presenter)->tags->first(); //=> TagPresenter
 ```
 
 > **Note:** The collection resolution works by looking for an instance of `IteratorAggregate`. The iterator is used to loop through the collection and generate presenters for each item. An attempt is then made to instantiate a new instance of the original object implementing `IteratorAggregate`. **That** is the return value.
@@ -179,34 +195,19 @@ If you want access to the raw association, simply request it from the underlying
 $presenter->_model->tags()->first(); //=> Tag
 ```
 
-### Helper Methods
-
-A global `present()` function can be made available by including the `helpers.php` file in your project's `composer.json`. Presenter doesn't autoload this file, giving you the choice whether or not to 'pollute' the global environment with this function.
-
-```php
-"autoload": {
-  "psr-4": {
-    ...
-  },
-  "files": [
-    "vendor/deefour/producer/src/helpers.php",
-    "vendor/deefour/presenter/src/helpers.php"
-  ]
-}
-```
-
-In a view, the following could be done
-
-```php
-present($article)->is_draft; //=> 'No'
-```
-
 ## Contribute
 
 - Issue Tracker: https://github.com/deefour/presenter/issues
 - Source Code: https://github.com/deefour/presenter
 
 ## Changelog
+
+#### 2.0.0 - February 12, 2017
+
+ - Replaced `Factory` with new `Resolver` class.
+ - Removed dependency on [`deefour\producer`](https://github.com/deefour/producer)
+ - Removed `Presentable` contract
+ - Simplified `README.md`
 
 #### 1.0.0 - October 7, 2015
 

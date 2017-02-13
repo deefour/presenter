@@ -2,15 +2,12 @@
 
 namespace Deefour\Presenter;
 
-use Deefour\Presenter\Contracts\Presentable;
-use Deefour\Producer\Contracts\Producible;
-use Deefour\Producer\Factory as ProductionFactory;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use IteratorAggregate;
 use ReflectionProperty;
 
-abstract class Presenter implements Producible
+abstract class Presenter
 {
     /**
      * The raw model object being decorated by the presenter.
@@ -20,13 +17,6 @@ abstract class Presenter implements Producible
      * @var Presentable
      */
     public $_model;
-
-    /**
-     * The resolution factory instance.
-     *
-     * @var ProductionFactory
-     */
-    protected $_factory;
 
     /**
      * A static mapping of snake-to-camel cased conversions.
@@ -40,10 +30,9 @@ abstract class Presenter implements Producible
      *
      * @param Presentable $model
      */
-    public function __construct(Presentable $model)
+    public function __construct($model)
     {
-        $this->_model   = $model;
-        $this->_factory = new ProductionFactory();
+        $this->_model = $model;
     }
 
     /**
@@ -66,7 +55,6 @@ abstract class Presenter implements Producible
      *
      * @param string $method
      * @param array  $args
-     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -78,7 +66,6 @@ abstract class Presenter implements Producible
      * Magic isset.
      *
      * @param string $property
-     *
      * @return bool
      */
     public function __isset($property)
@@ -100,7 +87,6 @@ abstract class Presenter implements Producible
      * @link https://github.com/illuminate/support/blob/master/Str.php
      *
      * @param string $property
-     *
      * @return string
      */
     protected function _deriveMethodName($property)
@@ -135,7 +121,6 @@ abstract class Presenter implements Producible
      *
      * @param string $property
      * @param array  $args
-     *
      * @return mixed
      */
     protected function _derive($property, array $args = [])
@@ -173,21 +158,16 @@ abstract class Presenter implements Producible
      * Support is available for IteratorAggregate instances, looping through the
      * collection and attempting to wrap each object in it's own presenter.
      *
-     * @param mixed $value
-     *
-     * @return mixed
-     *
      * @throws Exception
+     *
+     * @param mixed $value
+     * @return mixed
      */
     protected function decorate($value)
     {
         // Laravel relation
         if (is_a($value, Relation::class)) {
             return $this->decorate($value->getResults());
-        }
-
-        if ( ! ($value instanceof IteratorAggregate) && ! ($value instanceof Presentable)) {
-            return $value;
         }
 
         if ($value instanceof IteratorAggregate) {
@@ -201,9 +181,9 @@ abstract class Presenter implements Producible
             return new $collection($items);
         }
 
-        $presenter = $this->_factory->make($value, 'presenter');
+        $presenter = (new Resolver($value))->presenter();
 
-        if (is_null($presenter) || ! ($presenter instanceof self)) {
+        if (is_null($presenter)) {
             return $value;
         }
 
