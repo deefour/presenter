@@ -44,14 +44,14 @@ class Article
 
 the resolver will simply append `'Presenter'` to the `Article` FQN, looking for an `ArticlePresenter` class.
 
-A static `modelName` method can be implemented on the object to inform the resolver which class to use as a base for resolution.
+A static `modelClass` method can be implemented on the object to inform the resolver which class to use as a base for resolution.
 
 ```php
 class Article
 {
     static public function modelClass()
     {
-      return Post;
+      return Post::class;
     }
 
     // ...
@@ -64,7 +64,7 @@ use Deefour\Presenter\Resolver;
 (new Resolver)->presenter(new Article); //=> 'PostPresenter'
 ```
 
-A static `presenterMethod` can be implemented on the object to inform the resolver the exact FQN to use for presentation
+A static `presenterClass` can be implemented on the object to inform the resolver the exact FQN to use for presentation
 
 ```php
 class Article
@@ -165,7 +165,7 @@ class Article
 
     public function tags()
     {
-        $collection = Collection;
+        $collection = new Collection;
 
         $collection->push(new Tag);
         $collection->push(new Tag);
