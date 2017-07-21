@@ -180,7 +180,7 @@ $presenter->_model->tags()->first(); //=> Tag
 
 ## Changelog
 
-### 3.0.0 - July 20, 2017
+#### 3.0.0 - July 20, 2017
 
  - The resolver no longer accepts an object during instantiation. Instead, objects are passed directly to the `presenter()` and `presenterOrFail()` methods.
  - A new `resolveWith()` method on the resolver accepts a callable to customize resolution.
