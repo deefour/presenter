@@ -43,6 +43,7 @@ $resolver->presenter(new Article); //=> 'App\Presenters\ArticlePresenter'
 
 The resolver will look for a `modelClass()` method on an object. If found, the returned FQN will be used instead of the object itself.
 
+
 ```php
 class BlogPost
 {
@@ -142,7 +143,7 @@ class Article
 
     public function tags()
     {
-        $collection = Collection;
+        $collection = new Collection;
 
         $collection->push(new Tag);
         $collection->push(new Tag);
