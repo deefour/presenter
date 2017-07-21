@@ -4,6 +4,7 @@ namespace Deefour\Presenter;
 
 use Exception;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use InvalidArgumentException;
 use IteratorAggregate;
 use ReflectionProperty;
 
@@ -16,7 +17,9 @@ abstract class Presenter
      *
      * @var Presentable
      */
-    public $_model;
+    protected $_model;
+
+    protected $_resolver;
 
     /**
      * A static mapping of snake-to-camel cased conversions.
@@ -32,7 +35,13 @@ abstract class Presenter
      */
     public function __construct($model)
     {
-        $this->_model = $model;
+        $this->_model    = $model;
+        $this->_resolver = new Resolver;
+    }
+
+    public function model()
+    {
+        return $this->_model;
     }
 
     /**
@@ -46,6 +55,10 @@ abstract class Presenter
      */
     public function __get($property)
     {
+        if ($property === 'model') {
+            throw new InvalidArgumentException('Use the [model()] method to request the underlying model object');
+        }
+
         return $this->_derive($property);
     }
 
@@ -53,8 +66,8 @@ abstract class Presenter
      * Magic caller (ie. missing method handler). Provides transparent access to
      * methods on the model.
      *
-     * @param string $method
-     * @param array  $args
+     * @param  string $method
+     * @param  array  $args
      * @return mixed
      */
     public function __call($method, $args)
@@ -65,7 +78,7 @@ abstract class Presenter
     /**
      * Magic isset.
      *
-     * @param string $property
+     * @param  string $property
      * @return bool
      */
     public function __isset($property)
@@ -86,7 +99,7 @@ abstract class Presenter
      *
      * @link https://github.com/illuminate/support/blob/master/Str.php
      *
-     * @param string $property
+     * @param  string $property
      * @return string
      */
     protected function _deriveMethodName($property)
@@ -119,8 +132,8 @@ abstract class Presenter
      *
      * This will fail loudly if the property/method could not be derived.
      *
-     * @param string $property
-     * @param array  $args
+     * @param  string $property
+     * @param  array  $args
      * @return mixed
      */
     protected function _derive($property, array $args = [])
@@ -160,7 +173,7 @@ abstract class Presenter
      *
      * @throws Exception
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return mixed
      */
     protected function decorate($value)
@@ -181,12 +194,17 @@ abstract class Presenter
             return new $collection($items);
         }
 
-        $presenter = (new Resolver($value))->presenter();
+        $presenter = $this->resolver()->presenter($value);
 
         if (is_null($presenter)) {
             return $value;
         }
 
         return new $presenter($value);
+    }
+
+    protected function resolver()
+    {
+        return $this->_resolver;
     }
 }

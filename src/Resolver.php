@@ -7,31 +7,39 @@ use ReflectionClass;
 
 class Resolver
 {
-    public $object;
+    protected $resolver;
 
-    public function __construct($object)
+    public function __construct()
     {
-        $this->object = $object;
+        // The default resolver
+        $this->resolveWith(function ($base) {
+            return "{$base}Presenter";
+        });
     }
 
-    public function presenter()
+    public function presenter($object)
     {
-        $klass = $this->find();
+        $klass = $this->find($object);
 
         return class_exists($klass) ? $klass : null;
     }
 
-    public function presenterOrFail()
+    public function presenterOrFail($object)
     {
-        if (is_null($this->object)) {
+        if (is_null($object)) {
             throw new NotDefinedException('Unable to find presenter of null');
         }
 
-        if ($presenter = $this->presenter()) {
+        if ($presenter = $this->presenter($object)) {
             return $presenter;
         }
 
-        throw new NotDefinedException('Unable to find presenter for ' . get_class($this->object));
+        throw new NotDefinedException('Unable to find presenter for ' . get_class($object));
+    }
+
+    public function resolveWith(callable $resolver)
+    {
+        $this->resolver = $resolver;
     }
 
     /**
@@ -49,53 +57,42 @@ class Resolver
      * @param  string     $suffix
      * @return mixed|null
      */
-    public function find()
+    public function find($object)
     {
-        if (is_null($this->object)) {
+        if (is_null($object)) {
             return null;
         }
 
-        if (is_object($this->object)) {
-            $reflection   = new ReflectionClass($this->object);
-            $lookupMethod = 'presenterClass';
+        $resolver = $this->resolver;
 
-            if ($reflection->hasMethod($lookupMethod)) {
-                return call_user_func(join('::', [ $reflection->name, $lookupMethod ]));
-            }
-        }
-
-        if ($base = $this->findClassName($this->object)) {
-            return "{$base}Presenter";
-        }
-
-        return null;
+        return $resolver($this->findClassName($object));
     }
 
     /**
-     * Attempt to use reflecton to determine the FQN of a class related to $subject
+     * Attempt to use reflecton to determine the FQN of a class related to $object
      * that should be treated as the soure of the policy or scope name. The
-     * reflection checks for a static modelClass() method on the $subject. 'Policy'
+     * reflection checks for a static modelClass() method on the $object. 'Policy'
      * or 'Scope' will be appended to the returned FQN.
      *
-     * @param  mixed  $subject
+     * @param  mixed  $object
      * @return string
      */
-    protected function findClassName($subject)
+    protected function findClassName($object)
     {
-        if ( ! is_object($subject) && ! class_exists($subject)) {
+        if ( ! is_object($object) && ! class_exists($object)) {
             return null;
         }
 
-        $reflection = new ReflectionClass($subject);
+        $reflection = new ReflectionClass($object);
 
         if ($reflection->hasMethod('modelClass')) {
             return call_user_func($reflection->name . '::modelClass');
         }
 
-        if (is_string($subject)) {
-            return $subject;
+        if (is_string($object)) {
+            return $object;
         }
 
-        return get_class($subject);
+        return get_class($object);
     }
 }

@@ -3,12 +3,12 @@
 namespace spec\Deefour\Presenter\Stubs;
 
 use Deefour\Presenter\Stubs\Article;
-use Deefour\Presenter\Stubs\Author;
-use Deefour\Presenter\Stubs\Category;
 use Deefour\Presenter\Stubs\ArticlePresenter;
+use Deefour\Presenter\Stubs\Author;
 use Deefour\Presenter\Stubs\CategoryPresenter;
 use Deefour\Presenter\Stubs\EventPresenter;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;
 
 class ArticlePresenterSpec extends ObjectBehavior
@@ -23,27 +23,22 @@ class ArticlePresenterSpec extends ObjectBehavior
         $this->shouldHaveType(ArticlePresenter::class);
     }
 
-    public function it_should_allow_property_access_to_underlying_model()
-    {
-        $this->_model->shouldBeAnInstanceOf(Article::class);
-    }
-
     public function it_should_allow_method_access_to_underlying_model()
     {
-        $this->_model()->shouldBeAnInstanceOf(Article::class);
+        $this->model()->shouldBeAnInstanceOf(Article::class);
     }
 
     public function it_should_map_snake_case_property_to_camel_case_model_method()
     {
         $this->is_active->shouldBe(true);
 
-        $this->_model->title->shouldBe('sample article');
+        $this->model()->title->shouldBe('sample article');
         $this->title->shouldBe('Sample Article');
     }
 
     public function it_should_not_respond_to_model_access_without_underscore_prefix()
     {
-        $this->model->shouldBe(null);
+        $this->shouldThrow(InvalidArgumentException::class)->during('__get', [ 'model' ]);
     }
 
     public function it_should_pass_unknown_method_through_to_model()

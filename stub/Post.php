@@ -4,7 +4,7 @@ namespace Deefour\Presenter\Stubs;
 
 class Post extends Article
 {
-    static public function modelClass()
+    public static function modelClass()
     {
         return Article::class;
     }

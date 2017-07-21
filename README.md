@@ -17,65 +17,54 @@ composer require deefour/presenter
 
 **`>=PHP5.5.0` is required.**
 
-A factory class is available to resolve the FQCN of a presenter class associated with the passed object.
+### The Resolver
+
+The `Deefour\Presenter\Resolver` determines the FQN of a presenter class associated with an object. The default behavior of the resolver is to append `'Presenter'` to the `Article` FQN.
 
 ```php
 use Deefour\Presenter\Resolver;
 
-(new Resolver)->presenter(new Article);       //=> 'ArticlePresenter'
-(new Resolver)->presenterOrFail(new Article); //=> 'ArticlePresenter'
+(new Resolver)->presenter(new Article); //=> 'ArticlePresenter'
 ```
 
-Given an `Article` object
-
-```php
-class Article
-{
-    public $published = true;
-
-    public $title = 'Governor Mike Taylor Runs for Second Term';
-
-    public function isDraft()
-    {
-        return ! $this->published;
-    }
-}
-```
-
-the resolver will simply append `'Presenter'` to the `Article` FQN, looking for an `ArticlePresenter` class.
-
-A static `modelName` method can be implemented on the object to inform the resolver which class to use as a base for resolution.
-
-```php
-class Article
-{
-    static public function modelClass()
-    {
-      return Post;
-    }
-
-    // ...
-}
-```
+This behavior can be customized by passing a callable to the resolver.
 
 ```php
 use Deefour\Presenter\Resolver;
 
-(new Resolver)->presenter(new Article); //=> 'PostPresenter'
+$resolver = new Resolver;
+
+$resolver->resolveWith(function ($instance) {
+  return "App\Presenters\" . get_class($instance) . 'Presenter';
+});
+
+$resolver->presenter(new Article); //=> 'App\Presenters\ArticlePresenter'
 ```
 
-A static `presenterMethod` can be implemented on the object to inform the resolver the exact FQN to use for presentation
+The resolver will look for a `modelClass()` method on an object. If found, the returned FQN will be used instead of the object itself.
 
 ```php
-class Article
+class BlogPost
 {
-    static public function presenterClass()
-    {
-      return BlogPresenter::class;
-    }
-
-    // ...
+  static public function modelClass()
+  {
+      return Article::class;
+  }
 }
+
+(new Resolver)->presenter(new BlogPost); //=> 'ArticlePresenter'
+```
+
+### Instantiation
+
+Instantiating an instance of a presenter is your responsibility.
+
+```php
+use Deefour\Presenter\Resolver;
+
+$article       = new Article;
+$presenterName = (new Resolver)->presenter($article);
+$presenter     = new $presenterName($article);
 ```
 
 ```php
@@ -87,27 +76,15 @@ use Deefour\Presenter\Resolver;
 If the resulting FQN from the resolver does not match an existing, valid class name, `null` will be returned or a `NotDefinedException` will be thrown.
 
 ```php
-class Article
-{
-    static public function presenterClass()
-    {
-      return 'NonExistenterPresenter';
-    }
-
-    // ...
-}
-```
-
-```php
 use Deefour\Presenter\Resolver;
 
-(new Resolver)->presenter(new Article); //=> null
-(new Resolver)->presenterOrFail(new Article); //=> throws NotDefinedException
+(new Resolver)->presenter(new ObjectWithoutPresenter); //=> null
+(new Resolver)->presenterOrFail(new ObjectWithoutPresenter); //=> throws NotDefinedException
 ```
 
 ## Presenters
 
-The presenters themselves must extend `Deefour\Presenter\Presenter`.
+The presenters themselves extend `Deefour\Presenter\Presenter`.
 
 ```php
 use Deefour\Presenter\Presenter;
@@ -201,6 +178,13 @@ $presenter->_model->tags()->first(); //=> Tag
 - Source Code: https://github.com/deefour/presenter
 
 ## Changelog
+
+### 3.0.0 - July 20, 2017
+
+ - The resolver no longer accepts an object during instantiation. Instead, objects are passed directly to the `presenter()` and `presenterOrFail()` methods.
+ - A new `resolveWith()` method on the resolver accepts a callable to customize resolution.
+ - Support for the `presenterClass()` has been removed from the resolver in favor of the new `resolveWith()` method *on* the resolver. You can pass a callable with your existing `presenterClass()` logic to the resolver instead.
+ - Model access should only be done through the new `model()` method. Access to `_model` has been disabled.
 
 #### 2.0.0 - February 12, 2017
 
