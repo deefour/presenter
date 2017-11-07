@@ -180,6 +180,10 @@ $presenter->_model->tags()->first(); //=> Tag
 
 ## Changelog
 
+#### 3.0.1 - November 7, 2017
+
+ - Check for the existence of a method on the underlying modely before checking if it's a property. Fixes a conflict with Laravel's `__isset()` implementation on `Illuminate\Database\Eloquent\Model`.
+
 #### 3.0.0 - July 20, 2017
 
  - The resolver no longer accepts an object during instantiation. Instead, objects are passed directly to the `presenter()` and `presenterOrFail()` methods.

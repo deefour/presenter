@@ -148,12 +148,12 @@ abstract class Presenter
             return $this->decorate(call_user_func_array([$this, $method], $args));
         }
 
-        if (isset($this->_model->$property)) {
-            return $this->decorate($this->_model->$property);
-        }
-
         if (method_exists($this->_model, $method)) {
             return $this->decorate(call_user_func_array([$this->_model, $method], $args));
+        }
+
+        if (isset($this->_model->$property)) {
+            return $this->decorate($this->_model->$property);
         }
 
         return;
