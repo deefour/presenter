@@ -3,7 +3,7 @@
 namespace Deefour\Presenter;
 
 use Exception;
-use Illuminate\Database\Eloquent\Relations\Relation;
+
 use InvalidArgumentException;
 use IteratorAggregate;
 use ReflectionProperty;
@@ -19,7 +19,7 @@ abstract class Presenter
      */
     protected $_model;
 
-    protected $_resolver;
+    protected $_factory;
 
     /**
      * A static mapping of snake-to-camel cased conversions.
@@ -33,10 +33,10 @@ abstract class Presenter
      *
      * @param Presentable $model
      */
-    public function __construct($model)
+    public function __construct($model, CreatesPresenters $factory)
     {
         $this->_model    = $model;
-        $this->_resolver = new Resolver;
+        $this->_factory = $factory;
     }
 
     public function model()
@@ -145,18 +145,16 @@ abstract class Presenter
         $method = $this->_deriveMethodName($property);
 
         if (method_exists($this, $method)) {
-            return $this->decorate(call_user_func_array([$this, $method], $args));
+            return $this->attemptPresenterConversion(call_user_func_array([$this, $method], $args));
         }
 
         if (method_exists($this->_model, $method)) {
-            return $this->decorate(call_user_func_array([$this->_model, $method], $args));
+            return $this->attemptPresenterConversion(call_user_func_array([$this->_model, $method], $args));
         }
 
         if (isset($this->_model->$property)) {
-            return $this->decorate($this->_model->$property);
+            return $this->attemptPresenterConversion($this->_model->$property);
         }
-
-        return;
     }
 
     /**
@@ -176,35 +174,8 @@ abstract class Presenter
      * @param  mixed $value
      * @return mixed
      */
-    protected function decorate($value)
+    protected function attemptPresenterConversion($value)
     {
-        // Laravel relation
-        if (is_a($value, Relation::class)) {
-            return $this->decorate($value->getResults());
-        }
-
-        if ($value instanceof IteratorAggregate) {
-            $collection = get_class($value);
-            $items      = [];
-
-            foreach ($value as $item) {
-                $items[] = $this->decorate($item);
-            }
-
-            return new $collection($items);
-        }
-
-        $presenter = $this->resolver()->presenter($value);
-
-        if (is_null($presenter)) {
-            return $value;
-        }
-
-        return new $presenter($value);
-    }
-
-    protected function resolver()
-    {
-        return $this->_resolver;
+        return $this->_factory->make($value) ?? $value;
     }
 }
