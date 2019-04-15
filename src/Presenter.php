@@ -195,8 +195,8 @@ abstract class Presenter implements Producible
             $collection = get_class($value);
             $items      = [];
 
-            foreach ($value as $item) {
-                $items[] = $this->decorate($item);
+            foreach ($value as $key => $item) {
+                $items[$key] = $this->decorate($item);
             }
 
             return new $collection($items);
